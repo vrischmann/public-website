@@ -49,16 +49,16 @@ func Resume(skills templ.Component, experience []templ.Component, sideProjects t
 		if err != nil {
 			return err
 		}
-		_, err = templBuffer.WriteString("</a><i class=\"fa-solid fa-envelope\"></i><a href=\"https://rischmann.fr\">")
+		_, err = templBuffer.WriteString("</a><a href=\"https://rischmann.fr\">")
 		if err != nil {
 			return err
 		}
-		var_5 := `rischmann.fr`
+		var_5 := `Website`
 		_, err = templBuffer.WriteString(var_5)
 		if err != nil {
 			return err
 		}
-		_, err = templBuffer.WriteString("</a><i class=\"fa-solid fa-globe\"></i><a href=\"https://github.com/vrischmann\">")
+		_, err = templBuffer.WriteString("</a><a href=\"https://github.com/vrischmann\">")
 		if err != nil {
 			return err
 		}
@@ -67,21 +67,12 @@ func Resume(skills templ.Component, experience []templ.Component, sideProjects t
 		if err != nil {
 			return err
 		}
-		_, err = templBuffer.WriteString("</a><i class=\"fa-brands fa-github\"></i><a href=\"/assets/resume.pdf\">")
+		_, err = templBuffer.WriteString("</a></div></div><div class=\"resume-summary\"><h2>")
 		if err != nil {
 			return err
 		}
-		var_7 := `PDF`
+		var_7 := `Summary`
 		_, err = templBuffer.WriteString(var_7)
-		if err != nil {
-			return err
-		}
-		_, err = templBuffer.WriteString("</a><i class=\"fa-solid fa-file\"></i></div></div><div class=\"resume-summary\"><h2>")
-		if err != nil {
-			return err
-		}
-		var_8 := `Summary`
-		_, err = templBuffer.WriteString(var_8)
 		if err != nil {
 			return err
 		}
@@ -89,8 +80,8 @@ func Resume(skills templ.Component, experience []templ.Component, sideProjects t
 		if err != nil {
 			return err
 		}
-		var_9 := `I am a Staff engineer with 10+ years of experience building distributed systems, high-throughput webservices and data processing pipelines.`
-		_, err = templBuffer.WriteString(var_9)
+		var_8 := `I am a Staff engineer with 10+ years of experience building distributed systems, high-throughput webservices and data processing pipelines.`
+		_, err = templBuffer.WriteString(var_8)
 		if err != nil {
 			return err
 		}
@@ -106,8 +97,8 @@ func Resume(skills templ.Component, experience []templ.Component, sideProjects t
 		if err != nil {
 			return err
 		}
-		var_10 := `Work experience`
-		_, err = templBuffer.WriteString(var_10)
+		var_9 := `Work experience`
+		_, err = templBuffer.WriteString(var_9)
 		if err != nil {
 			return err
 		}
@@ -141,8 +132,8 @@ func Resume(skills templ.Component, experience []templ.Component, sideProjects t
 		if err != nil {
 			return err
 		}
-		var_11 := `Interests`
-		_, err = templBuffer.WriteString(var_11)
+		var_10 := `Interests`
+		_, err = templBuffer.WriteString(var_10)
 		if err != nil {
 			return err
 		}
@@ -150,8 +141,8 @@ func Resume(skills templ.Component, experience []templ.Component, sideProjects t
 		if err != nil {
 			return err
 		}
-		var_12 := `Movies, TV shows, listening to music, podcasts and audiobooks.`
-		_, err = templBuffer.WriteString(var_12)
+		var_11 := `Movies, TV shows, listening to music, podcasts and audiobooks.`
+		_, err = templBuffer.WriteString(var_11)
 		if err != nil {
 			return err
 		}
@@ -159,57 +150,12 @@ func Resume(skills templ.Component, experience []templ.Component, sideProjects t
 		if err != nil {
 			return err
 		}
-		var_13 := `Video games, programming, discovering new things.`
-		_, err = templBuffer.WriteString(var_13)
+		var_12 := `Video games, programming, discovering new things.`
+		_, err = templBuffer.WriteString(var_12)
 		if err != nil {
 			return err
 		}
-		_, err = templBuffer.WriteString("</p></div><div class=\"resume-mobile-links\"><h2>")
-		if err != nil {
-			return err
-		}
-		var_14 := `Contacts`
-		_, err = templBuffer.WriteString(var_14)
-		if err != nil {
-			return err
-		}
-		_, err = templBuffer.WriteString("</h2><ul class=\"links\"><li><a href=\"mailto:vincent@rischmann.fr\" class=\"envelope\">")
-		if err != nil {
-			return err
-		}
-		var_15 := `vincent@rischmann.fr`
-		_, err = templBuffer.WriteString(var_15)
-		if err != nil {
-			return err
-		}
-		_, err = templBuffer.WriteString("</a></li><li><a href=\"https://rischmann.fr\">")
-		if err != nil {
-			return err
-		}
-		var_16 := `rischmann.fr`
-		_, err = templBuffer.WriteString(var_16)
-		if err != nil {
-			return err
-		}
-		_, err = templBuffer.WriteString("</a></li><li><a href=\"https://github.com/vrischmann\">")
-		if err != nil {
-			return err
-		}
-		var_17 := `GitHub`
-		_, err = templBuffer.WriteString(var_17)
-		if err != nil {
-			return err
-		}
-		_, err = templBuffer.WriteString("</a></li><li><a href=\"https://rischmann.fr/resume.pdf\">")
-		if err != nil {
-			return err
-		}
-		var_18 := `PDF`
-		_, err = templBuffer.WriteString(var_18)
-		if err != nil {
-			return err
-		}
-		_, err = templBuffer.WriteString("</a></li></ul></div></div>")
+		_, err = templBuffer.WriteString("</p></div></div>")
 		if err != nil {
 			return err
 		}
@@ -228,9 +174,9 @@ func ResumePage(title string, body templ.Component) templ.Component {
 			defer templ.ReleaseBuffer(templBuffer)
 		}
 		ctx = templ.InitializeContext(ctx)
-		var_19 := templ.GetChildren(ctx)
-		if var_19 == nil {
-			var_19 = templ.NopComponent
+		var_13 := templ.GetChildren(ctx)
+		if var_13 == nil {
+			var_13 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
 		_, err = templBuffer.WriteString("<html>")
