@@ -1,0 +1,8 @@
+services:
+  website:
+    build:
+      context: .
+      args:
+        caddyfile: Caddyfile
+    ports:
+      - "2015:2015"

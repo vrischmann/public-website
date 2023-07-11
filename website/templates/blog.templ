@@ -1,0 +1,44 @@
+package templates
+
+import (
+	"strconv"
+	"time"
+)
+
+type BlogItem struct {
+	LinkURL string
+	LinkText string
+	Date time.Time
+}
+
+type BlogItems struct {
+	Year int
+	Items []BlogItem
+}
+
+templ BlogIndex(allItems []BlogItems) {
+	for _, items := range allItems {
+		<div class="blog-month">
+			<h2>{ strconv.FormatInt(int64(items.Year), 10) }</h2>
+			<ul>
+				for _, item := range items.Items {
+					<li><a href={ templ.SafeURL(item.LinkURL) }>{ item.LinkText }</a><span>{ item.Date.Format("January 02") }</span></li>
+				}
+			</ul>
+		</div>
+	}
+}
+
+templ BlogContent(title string, date time.Time, tableOfContents templ.Component, content templ.Component) {
+	<div class="article-header">
+		<h1>{ title }</h1>
+		<h4>{ date.Format("2006 Jan 02") }</h4>
+	</div>
+	<div class="article">
+		<nav class="blog-toc">
+			{! tableOfContents }
+		</nav>
+		{! content }
+	</div>
+}
+

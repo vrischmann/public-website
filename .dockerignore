@@ -1,0 +1,6 @@
+# flyctl launch added from .gitignore
+cv.pdf
+cv.htm
+cv_files
+*.pdf
+fly.toml

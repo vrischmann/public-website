@@ -1,0 +1,19 @@
+{
+	debug
+	auto_https off
+	admin off
+}
+
+:2015
+
+root * build
+
+rewrite / /about.html
+
+handle /_internal/health {
+	respond 200
+}
+
+uri strip_suffix /
+try_files {path}.html
+file_server

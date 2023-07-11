@@ -1,0 +1,53 @@
+package templates
+
+templ Resume(skills templ.Component, experience []templ.Component, sideProjects templ.Component) {
+	<div class="resume">
+		<div class="resume-header">
+			<div class="title">
+				<h1>Vincent Rischmann</h1>
+				<h2>Staff engineer</h2>
+			</div>
+			<div class="links"><a href="mailto:vincent@rischmann.fr" class="envelope">vincent@rischmann.fr</a><i class="fa-solid fa-envelope"></i><a href="https://rischmann.fr">rischmann.fr</a><i class="fa-solid fa-globe"></i><a href="https://github.com/vrischmann">GitHub</a><i class="fa-brands fa-github"></i><a href="/assets/resume.pdf">PDF</a><i class="fa-solid fa-file"></i></div>
+		</div>
+		<div class="resume-summary">
+			<h2>Summary</h2>
+			<p>I am a Staff engineer with 10+ years of experience building distributed systems, high-throughput webservices and data processing pipelines.</p>
+		</div>
+		<div class="resume-skills">
+			{! skills }
+		</div>
+		<div class="resume-experience">
+			<h2>Work experience</h2>
+			for _, workExperience := range experience {
+				<div class="work-experience">
+					{! workExperience }
+				</div>
+			}
+		</div>
+		<div class="resume-side-projects">
+			{! sideProjects }
+		</div>
+		<div class="resume-interests">
+			<h2>Interests</h2>
+			<p>Movies, TV shows, listening to music, podcasts and audiobooks.</p>
+			<p>Video games, programming, discovering new things.</p>
+		</div>
+		<div class="resume-mobile-links">
+			<h2>Contacts</h2>
+			<ul class="links">
+				<li><a href="mailto:vincent@rischmann.fr" class="envelope">vincent@rischmann.fr</a></li>
+				<li><a href="https://rischmann.fr">rischmann.fr</a></li>
+				<li><a href="https://github.com/vrischmann">GitHub</a></li>
+				<li><a href="https://rischmann.fr/resume.pdf">PDF</a></li>
+			</ul>
+		</div>
+	</div>
+}
+
+templ ResumePage(title string, body templ.Component) {
+	<html>
+		@HeaderComponent(title)
+		{! body }
+	</html>
+}
+
