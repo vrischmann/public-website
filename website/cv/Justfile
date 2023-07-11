@@ -1,0 +1,6 @@
+dir := `mktemp -d`
+
+default:
+	wget -nH -np -r -P {{dir}} http://localhost:2015/resume || true
+	docker run --rm -v {{dir}}:/converted/ arachnysdocker/athenapdf athenapdf /converted/resume
+	cp {{dir}}/*.pdf .
