@@ -51,18 +51,15 @@ templ contentComponent(assets Assets, body templ.Component) {
 				</ul>
 			</footer>
 		</div>
+		@jsAssets(assets)
 	</body>
 }
 
 
-templ CodePage(title string, assets Assets, body templ.Component) {
+templ Page(title string, assets Assets, body templ.Component) {
 	<html>
 		@headerComponent(title, assets)
 		@contentComponent(assets, body)
 	</html>
-}
-
-templ Page(title string, assets Assets, body templ.Component) {
-	<html>@headerComponent(title, assets)@contentComponent(assets, body)</html>
 }
 
