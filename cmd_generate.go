@@ -123,33 +123,32 @@ func createOutputFile(buildRootDir string, path string) (*os.File, error) {
 }
 
 const (
-	formatStandard         = "standard"
-	formatStandardWithCode = "standard_with_code"
-	formatBlogEntry        = "blog_entry"
-	formatResumePart       = "resume_part"
+	formatStandard   = "standard"
+	formatBlogEntry  = "blog_entry"
+	formatResumePart = "resume_part"
 )
 
 type pageMetadata struct {
 	Title  string
 	Date   time.Time
 	Format string
-	Extra  map[string]string
+	Extra  map[string]any
 }
 
 func parsePageMetadata(metadata map[string]any) (pageMetadata, error) {
 	var res pageMetadata
-	res.Extra = make(map[string]string)
+	res.Extra = make(map[string]any)
 
 	for k, v := range metadata {
-		res.Extra[k] = v.(string)
+		res.Extra[k] = v
 	}
 
 	if tmp, ok := res.Extra["title"]; ok {
-		res.Title = tmp
+		res.Title = tmp.(string)
 	}
 
 	if tmp, ok := res.Extra["date"]; ok {
-		date, err := time.Parse("2006 January 02", tmp)
+		date, err := time.Parse("2006 January 02", tmp.(string))
 		if err != nil {
 			return pageMetadata{}, fmt.Errorf("invalid `date` value %q, should be a date in the `2006 Jan 02` format", tmp)
 		}
@@ -157,7 +156,7 @@ func parsePageMetadata(metadata map[string]any) (pageMetadata, error) {
 	}
 
 	if tmp, ok := res.Extra["format"]; ok {
-		res.Format = tmp
+		res.Format = tmp.(string)
 	}
 
 	return res, nil
@@ -175,6 +174,15 @@ type page struct {
 func (p page) generate(logger *zap.Logger, renderer goldmarkrenderer.Renderer, buildRootDir string) error {
 	ctx := context.Background()
 
+	assets := getDefaultAssets()
+
+	if v, ok := p.metadata.Extra["require_prism"]; ok && v.(bool) == true {
+		assets.CSS = append(assets.CSS, "prism.css")
+		assets.JS = append(assets.JS, "prism.js")
+	}
+
+	//
+
 	var page templ.Component
 	switch p.metadata.Format {
 	case formatStandard:
@@ -184,16 +192,7 @@ func (p page) generate(logger *zap.Logger, renderer goldmarkrenderer.Renderer, b
 			node:     p.markdownDocument,
 		}
 
-		page = templates.Page(p.metadata.Title, content)
-
-	case formatStandardWithCode:
-		content := markdownHTMLComponent{
-			renderer: renderer,
-			source:   p.sourceData,
-			node:     p.markdownDocument,
-		}
-
-		page = templates.CodePage(p.metadata.Title, content)
+		page = templates.Page(p.metadata.Title, assets, content)
 
 	case formatBlogEntry:
 		// Generate the ToC
@@ -215,7 +214,7 @@ func (p page) generate(logger *zap.Logger, renderer goldmarkrenderer.Renderer, b
 		}
 
 		blogContent := templates.BlogContent(p.metadata.Title, p.metadata.Date, tableOfContents, content)
-		page = templates.Page(p.metadata.Title, blogContent)
+		page = templates.Page(p.metadata.Title, assets, blogContent)
 
 	default:
 		logger.Debug("skipping page, unknown format", zap.String("path", p.path))
@@ -315,6 +314,8 @@ func collectPages(rootDir string, parser goldmarkparser.Parser) (res []page, err
 func generateBlogIndex(logger *zap.Logger, buildRootDir string, pages pages) error {
 	ctx := context.Background()
 
+	assets := getDefaultAssets()
+
 	// Generate the index page
 
 	blogItemsPerYear := make(map[int][]templates.BlogItem)
@@ -344,7 +345,7 @@ func generateBlogIndex(logger *zap.Logger, buildRootDir string, pages pages) err
 	})
 
 	blogIndex := templates.BlogIndex(blogItems)
-	page := templates.Page("Vincent Rischmann - Blog", blogIndex)
+	page := templates.Page("Vincent Rischmann - Blog", assets, blogIndex)
 
 	// Rendering page
 
@@ -367,6 +368,8 @@ func generateBlogIndex(logger *zap.Logger, buildRootDir string, pages pages) err
 
 func generateResume(logger *zap.Logger, render goldmarkrenderer.Renderer, buildRootDir string, pages pages) error {
 	ctx := context.Background()
+
+	assets := getDefaultAssets()
 
 	// Build the resume compoentns
 
@@ -408,7 +411,7 @@ func generateResume(logger *zap.Logger, render goldmarkrenderer.Renderer, buildR
 	}
 
 	resume := templates.Resume(skills, experience, sideProjects)
-	page := templates.ResumePage("Vincent Rischmann - Resume", resume)
+	page := templates.ResumePage("Vincent Rischmann - Resume", assets, resume)
 
 	// Rendering page
 
@@ -427,4 +430,11 @@ func generateResume(logger *zap.Logger, render goldmarkrenderer.Renderer, buildR
 	}
 
 	return nil
+}
+
+func getDefaultAssets() templates.Assets {
+	var assets templates.Assets
+	assets.CSS = []string{"style.css"}
+
+	return assets
 }
