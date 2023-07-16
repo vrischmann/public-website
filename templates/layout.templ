@@ -1,17 +1,19 @@
 package templates
 
-templ HeaderComponent(title string) {
+templ headerComponent(title string, additionalStylesheets templ.Component) {
 	<head>
 		<meta charset="utf-8"/>
 		<meta name="viewport" content="width=device-width, initial-scale=1"/>
 		<title>{ title }</title>
 		<link rel="stylesheet" type="text/css" href="/assets/style.css"/>
-		<link rel="stylesheet" type="text/css" href="/assets/prism.css"/>
+		if additionalStylesheets != nil {
+			{! additionalStylesheets }
+		}
 		<link rel="shortcut icon" type="image/png" href="/assets/favicon.png"/>
 	</head>
 }
 
-templ ContentComponent(body templ.Component) {
+templ contentComponent(body templ.Component) {
 	<body>
 		<div class="container">
 			<header>
@@ -35,11 +37,23 @@ templ ContentComponent(body templ.Component) {
 				</ul>
 			</footer>
 		</div>
-		<script src="/assets/prism.js"></script>
 	</body>
 }
 
+
+templ prismStylesheet() {
+	<link rel="stylesheet" type="text/css" href="/assets/prism.css"/>
+}
+
+templ CodePage(title string, body templ.Component) {
+	<html>
+		@headerComponent(title, prismStylesheet())
+		@contentComponent(body)
+		<script src="/assets/prism.js"></script>
+	</html>
+}
+
 templ Page(title string, body templ.Component) {
-	<html>@HeaderComponent(title)@ContentComponent(body)</html>
+	<html>@headerComponent(title, nil)@contentComponent(body)</html>
 }
 
