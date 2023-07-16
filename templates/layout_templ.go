@@ -9,7 +9,7 @@ import "context"
 import "io"
 import "bytes"
 
-func HeaderComponent(title string) templ.Component {
+func headerComponent(title string, additionalStylesheets templ.Component) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, w io.Writer) (err error) {
 		templBuffer, templIsBuffer := w.(*bytes.Buffer)
 		if !templIsBuffer {
@@ -31,7 +31,17 @@ func HeaderComponent(title string) templ.Component {
 		if err != nil {
 			return err
 		}
-		_, err = templBuffer.WriteString("</title><link rel=\"stylesheet\" type=\"text/css\" href=\"/assets/style.css\"><link rel=\"stylesheet\" type=\"text/css\" href=\"/assets/prism.css\"><link rel=\"shortcut icon\" type=\"image/png\" href=\"/assets/favicon.png\"></head>")
+		_, err = templBuffer.WriteString("</title><link rel=\"stylesheet\" type=\"text/css\" href=\"/assets/style.css\">")
+		if err != nil {
+			return err
+		}
+		if additionalStylesheets != nil {
+			err = additionalStylesheets.Render(ctx, templBuffer)
+			if err != nil {
+				return err
+			}
+		}
+		_, err = templBuffer.WriteString("<link rel=\"shortcut icon\" type=\"image/png\" href=\"/assets/favicon.png\"></head>")
 		if err != nil {
 			return err
 		}
@@ -42,7 +52,7 @@ func HeaderComponent(title string) templ.Component {
 	})
 }
 
-func ContentComponent(body templ.Component) templ.Component {
+func contentComponent(body templ.Component) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, w io.Writer) (err error) {
 		templBuffer, templIsBuffer := w.(*bytes.Buffer)
 		if !templIsBuffer {
@@ -144,16 +154,76 @@ func ContentComponent(body templ.Component) templ.Component {
 		if err != nil {
 			return err
 		}
-		_, err = templBuffer.WriteString("</a></li></ul></footer></div><script src=\"/assets/prism.js\">")
+		_, err = templBuffer.WriteString("</a></li></ul></footer></div></body>")
 		if err != nil {
 			return err
 		}
-		var_13 := ``
-		_, err = templBuffer.WriteString(var_13)
+		if !templIsBuffer {
+			_, err = io.Copy(w, templBuffer)
+		}
+		return err
+	})
+}
+
+func prismStylesheet() templ.Component {
+	return templ.ComponentFunc(func(ctx context.Context, w io.Writer) (err error) {
+		templBuffer, templIsBuffer := w.(*bytes.Buffer)
+		if !templIsBuffer {
+			templBuffer = templ.GetBuffer()
+			defer templ.ReleaseBuffer(templBuffer)
+		}
+		ctx = templ.InitializeContext(ctx)
+		var_13 := templ.GetChildren(ctx)
+		if var_13 == nil {
+			var_13 = templ.NopComponent
+		}
+		ctx = templ.ClearChildren(ctx)
+		_, err = templBuffer.WriteString("<link rel=\"stylesheet\" type=\"text/css\" href=\"/assets/prism.css\">")
 		if err != nil {
 			return err
 		}
-		_, err = templBuffer.WriteString("</script></body>")
+		if !templIsBuffer {
+			_, err = io.Copy(w, templBuffer)
+		}
+		return err
+	})
+}
+
+func CodePage(title string, body templ.Component) templ.Component {
+	return templ.ComponentFunc(func(ctx context.Context, w io.Writer) (err error) {
+		templBuffer, templIsBuffer := w.(*bytes.Buffer)
+		if !templIsBuffer {
+			templBuffer = templ.GetBuffer()
+			defer templ.ReleaseBuffer(templBuffer)
+		}
+		ctx = templ.InitializeContext(ctx)
+		var_14 := templ.GetChildren(ctx)
+		if var_14 == nil {
+			var_14 = templ.NopComponent
+		}
+		ctx = templ.ClearChildren(ctx)
+		_, err = templBuffer.WriteString("<html>")
+		if err != nil {
+			return err
+		}
+		err = headerComponent(title, prismStylesheet()).Render(ctx, templBuffer)
+		if err != nil {
+			return err
+		}
+		err = contentComponent(body).Render(ctx, templBuffer)
+		if err != nil {
+			return err
+		}
+		_, err = templBuffer.WriteString("<script src=\"/assets/prism.js\">")
+		if err != nil {
+			return err
+		}
+		var_15 := ``
+		_, err = templBuffer.WriteString(var_15)
+		if err != nil {
+			return err
+		}
+		_, err = templBuffer.WriteString("</script></html>")
 		if err != nil {
 			return err
 		}
@@ -172,20 +242,20 @@ func Page(title string, body templ.Component) templ.Component {
 			defer templ.ReleaseBuffer(templBuffer)
 		}
 		ctx = templ.InitializeContext(ctx)
-		var_14 := templ.GetChildren(ctx)
-		if var_14 == nil {
-			var_14 = templ.NopComponent
+		var_16 := templ.GetChildren(ctx)
+		if var_16 == nil {
+			var_16 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
 		_, err = templBuffer.WriteString("<html>")
 		if err != nil {
 			return err
 		}
-		err = HeaderComponent(title).Render(ctx, templBuffer)
+		err = headerComponent(title, nil).Render(ctx, templBuffer)
 		if err != nil {
 			return err
 		}
-		err = ContentComponent(body).Render(ctx, templBuffer)
+		err = contentComponent(body).Render(ctx, templBuffer)
 		if err != nil {
 			return err
 		}

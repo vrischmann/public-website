@@ -237,7 +237,7 @@ func ResumePage(title string, body templ.Component) templ.Component {
 		if err != nil {
 			return err
 		}
-		err = HeaderComponent(title).Render(ctx, templBuffer)
+		err = headerComponent(title, nil).Render(ctx, templBuffer)
 		if err != nil {
 			return err
 		}
