@@ -1,6 +1,0 @@
-deploy:
-	fly machine run miniflux/miniflux:latest            \
-	  --memory 256                                      \
-	  --region cdg                                      \
-	  --env RUN_MIGRATIONS=1                            \
-	  --env BASE_URL="https://rischmann.fr/miniflux"
