@@ -1,19 +1,33 @@
 package templates
 
-templ headerComponent(title string, additionalStylesheets templ.Component) {
+type Assets struct {
+	CSS []string
+	JS []string
+}
+
+templ cssAssets(assets Assets) {
+	for _, asset := range assets.CSS {
+		<link rel="stylesheet" type="text/css" href={ "/assets/"+asset } />
+	}
+}
+
+templ jsAssets(assets Assets) {
+	for _, asset := range assets.JS {
+		<script src={ "/assets/"+asset }></script>
+	}
+}
+
+templ headerComponent(title string, assets Assets) {
 	<head>
 		<meta charset="utf-8"/>
 		<meta name="viewport" content="width=device-width, initial-scale=1"/>
 		<title>{ title }</title>
-		<link rel="stylesheet" type="text/css" href="/assets/style.css"/>
-		if additionalStylesheets != nil {
-			{! additionalStylesheets }
-		}
+		@cssAssets(assets)
 		<link rel="shortcut icon" type="image/png" href="/assets/favicon.png"/>
 	</head>
 }
 
-templ contentComponent(body templ.Component) {
+templ contentComponent(assets Assets, body templ.Component) {
 	<body>
 		<div class="container">
 			<header>
@@ -41,19 +55,14 @@ templ contentComponent(body templ.Component) {
 }
 
 
-templ prismStylesheet() {
-	<link rel="stylesheet" type="text/css" href="/assets/prism.css"/>
-}
-
-templ CodePage(title string, body templ.Component) {
+templ CodePage(title string, assets Assets, body templ.Component) {
 	<html>
-		@headerComponent(title, prismStylesheet())
-		@contentComponent(body)
-		<script src="/assets/prism.js"></script>
+		@headerComponent(title, assets)
+		@contentComponent(assets, body)
 	</html>
 }
 
-templ Page(title string, body templ.Component) {
-	<html>@headerComponent(title, nil)@contentComponent(body)</html>
+templ Page(title string, assets Assets, body templ.Component) {
+	<html>@headerComponent(title, assets)@contentComponent(assets, body)</html>
 }
 
