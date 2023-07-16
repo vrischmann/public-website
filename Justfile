@@ -1,6 +1,6 @@
 build:
 	templ generate ./...
-	go run go.rischmann.fr/website-generator
+	go run go.rischmann.fr/website-generator generate
 	rsync -av assets build/.
 	rsync -av --include="*.png" --include="*.pdf" --include="*/" --exclude="*" pages/ build/.
 
