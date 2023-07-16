@@ -31,16 +31,7 @@ func HeaderComponent(title string) templ.Component {
 		if err != nil {
 			return err
 		}
-		_, err = templBuffer.WriteString("</title><link rel=\"stylesheet\" type=\"text/css\" href=\"/assets/style.css\"><link rel=\"stylesheet\" type=\"text/css\" href=\"/assets/prism.css\"><link rel=\"shortcut icon\" type=\"image/png\" href=\"/assets/favicon.png\"><script src=\"https://kit.fontawesome.com/bb474c1b63.js\" crossorigin=\"anonymous\">")
-		if err != nil {
-			return err
-		}
-		var_3 := ``
-		_, err = templBuffer.WriteString(var_3)
-		if err != nil {
-			return err
-		}
-		_, err = templBuffer.WriteString("</script></head>")
+		_, err = templBuffer.WriteString("</title><link rel=\"stylesheet\" type=\"text/css\" href=\"/assets/style.css\"><link rel=\"stylesheet\" type=\"text/css\" href=\"/assets/prism.css\"><link rel=\"shortcut icon\" type=\"image/png\" href=\"/assets/favicon.png\"></head>")
 		if err != nil {
 			return err
 		}
@@ -59,17 +50,17 @@ func ContentComponent(body templ.Component) templ.Component {
 			defer templ.ReleaseBuffer(templBuffer)
 		}
 		ctx = templ.InitializeContext(ctx)
-		var_4 := templ.GetChildren(ctx)
-		if var_4 == nil {
-			var_4 = templ.NopComponent
+		var_3 := templ.GetChildren(ctx)
+		if var_3 == nil {
+			var_3 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
 		_, err = templBuffer.WriteString("<body><div class=\"container\"><header><ul><li><a href=\"/code\">")
 		if err != nil {
 			return err
 		}
-		var_5 := `/Code`
-		_, err = templBuffer.WriteString(var_5)
+		var_4 := `/Code`
+		_, err = templBuffer.WriteString(var_4)
 		if err != nil {
 			return err
 		}
@@ -77,8 +68,8 @@ func ContentComponent(body templ.Component) templ.Component {
 		if err != nil {
 			return err
 		}
-		var_6 := `/Blog`
-		_, err = templBuffer.WriteString(var_6)
+		var_5 := `/Blog`
+		_, err = templBuffer.WriteString(var_5)
 		if err != nil {
 			return err
 		}
@@ -86,8 +77,8 @@ func ContentComponent(body templ.Component) templ.Component {
 		if err != nil {
 			return err
 		}
-		var_7 := `/About`
-		_, err = templBuffer.WriteString(var_7)
+		var_6 := `/About`
+		_, err = templBuffer.WriteString(var_6)
 		if err != nil {
 			return err
 		}
@@ -95,8 +86,8 @@ func ContentComponent(body templ.Component) templ.Component {
 		if err != nil {
 			return err
 		}
-		var_8 := `/Resume`
-		_, err = templBuffer.WriteString(var_8)
+		var_7 := `/Resume`
+		_, err = templBuffer.WriteString(var_7)
 		if err != nil {
 			return err
 		}
@@ -112,8 +103,8 @@ func ContentComponent(body templ.Component) templ.Component {
 		if err != nil {
 			return err
 		}
-		var_9 := `GitHub`
-		_, err = templBuffer.WriteString(var_9)
+		var_8 := `GitHub`
+		_, err = templBuffer.WriteString(var_8)
 		if err != nil {
 			return err
 		}
@@ -121,8 +112,8 @@ func ContentComponent(body templ.Component) templ.Component {
 		if err != nil {
 			return err
 		}
-		var_10 := `Mastodon`
-		_, err = templBuffer.WriteString(var_10)
+		var_9 := `Mastodon`
+		_, err = templBuffer.WriteString(var_9)
 		if err != nil {
 			return err
 		}
@@ -130,8 +121,8 @@ func ContentComponent(body templ.Component) templ.Component {
 		if err != nil {
 			return err
 		}
-		var_11 := `Email`
-		_, err = templBuffer.WriteString(var_11)
+		var_10 := `Email`
+		_, err = templBuffer.WriteString(var_10)
 		if err != nil {
 			return err
 		}
@@ -139,8 +130,8 @@ func ContentComponent(body templ.Component) templ.Component {
 		if err != nil {
 			return err
 		}
-		var_12 := `LinkedIn`
-		_, err = templBuffer.WriteString(var_12)
+		var_11 := `LinkedIn`
+		_, err = templBuffer.WriteString(var_11)
 		if err != nil {
 			return err
 		}
@@ -148,8 +139,8 @@ func ContentComponent(body templ.Component) templ.Component {
 		if err != nil {
 			return err
 		}
-		var_13 := `Twitter`
-		_, err = templBuffer.WriteString(var_13)
+		var_12 := `Twitter`
+		_, err = templBuffer.WriteString(var_12)
 		if err != nil {
 			return err
 		}
@@ -157,8 +148,8 @@ func ContentComponent(body templ.Component) templ.Component {
 		if err != nil {
 			return err
 		}
-		var_14 := ``
-		_, err = templBuffer.WriteString(var_14)
+		var_13 := ``
+		_, err = templBuffer.WriteString(var_13)
 		if err != nil {
 			return err
 		}
@@ -181,9 +172,9 @@ func Page(title string, body templ.Component) templ.Component {
 			defer templ.ReleaseBuffer(templBuffer)
 		}
 		ctx = templ.InitializeContext(ctx)
-		var_15 := templ.GetChildren(ctx)
-		if var_15 == nil {
-			var_15 = templ.NopComponent
+		var_14 := templ.GetChildren(ctx)
+		if var_14 == nil {
+			var_14 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
 		_, err = templBuffer.WriteString("<html>")

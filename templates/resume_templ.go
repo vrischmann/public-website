@@ -241,6 +241,19 @@ func ResumePage(title string, body templ.Component) templ.Component {
 		if err != nil {
 			return err
 		}
+		_, err = templBuffer.WriteString("<script src=\"https://kit.fontawesome.com/bb474c1b63.js\" crossorigin=\"anonymous\">")
+		if err != nil {
+			return err
+		}
+		var_20 := ``
+		_, err = templBuffer.WriteString(var_20)
+		if err != nil {
+			return err
+		}
+		_, err = templBuffer.WriteString("</script>")
+		if err != nil {
+			return err
+		}
 		err = body.Render(ctx, templBuffer)
 		if err != nil {
 			return err
