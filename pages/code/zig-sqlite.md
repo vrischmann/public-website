@@ -1,6 +1,6 @@
 ---
 title: zig-sqlite - small wrapper around SQLite's C API
-format: standard
+format: standard_with_code
 ---
 
 # zig-sqlite - small wrapper around SQLite's C API

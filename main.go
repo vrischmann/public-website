@@ -58,9 +58,10 @@ func createOutputFile(buildRootDir string, path string) (*os.File, error) {
 }
 
 const (
-	formatStandard   = "standard"
-	formatBlogEntry  = "blog_entry"
-	formatResumePart = "resume_part"
+	formatStandard         = "standard"
+	formatStandardWithCode = "standard_with_code"
+	formatBlogEntry        = "blog_entry"
+	formatResumePart       = "resume_part"
 )
 
 type pageMetadata struct {
@@ -119,6 +120,15 @@ func (p page) generate(logger *zap.Logger, renderer goldmarkrenderer.Renderer, b
 		}
 
 		page = templates.Page(p.metadata.Title, content)
+
+	case formatStandardWithCode:
+		content := markdownHTMLComponent{
+			renderer: renderer,
+			source:   p.sourceData,
+			node:     p.markdownDocument,
+		}
+
+		page = templates.CodePage(p.metadata.Title, content)
 
 	case formatBlogEntry:
 		// Generate the ToC
