@@ -1,5 +1,2 @@
-/website/cv.pdf
-/website/cv.htm
-/website/cv_files
-/website/*.pdf
-/website/output_public
+/cv/*.pdf
+/build
