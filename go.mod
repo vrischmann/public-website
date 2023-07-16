@@ -4,6 +4,7 @@ go 1.20
 
 require (
 	github.com/a-h/templ v0.2.304
+	github.com/peterbourgon/ff/v3 v3.3.2
 	github.com/yuin/goldmark v1.4.13
 	github.com/yuin/goldmark-meta v1.1.0
 	go.abhg.dev/goldmark/toc v0.4.0
@@ -17,5 +18,5 @@ require (
 	go.uber.org/multierr v1.9.0 // indirect
 	golang.org/x/mod v0.12.0 // indirect
 	golang.org/x/sys v0.10.0 // indirect
-	gopkg.in/yaml.v2 v2.3.0 // indirect
+	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
