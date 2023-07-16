@@ -1,6 +1,7 @@
 ---
 title: envconfig - read configuration data from environment variables
-format: standard_with_code
+format: standard
+require_prism: true
 ---
 
 # envconfig - read configuration data from environment variables
