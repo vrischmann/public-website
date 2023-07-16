@@ -10,6 +10,5 @@ watch-build:
 docker_dev: build
 	docker compose up --build
 
-deploy VERSION: build
-	fly deploy --image-label {{VERSION}} --build-only --build-arg caddyfile=Caddyfile.prod --push
-	fly image update --image registry.fly.io/vrischmann-public-website:{{VERSION}}
+deploy: build
+	rsync -avz --delete build/. wevo.rischmann.fr:/data/website/.
