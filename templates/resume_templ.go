@@ -67,7 +67,7 @@ func Resume(skills templ.Component, experience []templ.Component, sideProjects t
 		if err != nil {
 			return err
 		}
-		_, err = templBuffer.WriteString("</a><i class=\"fa-brands fa-github\"></i><a href=\"/assets/resume.pdf\">")
+		_, err = templBuffer.WriteString("</a><i class=\"fa-brands fa-github\"></i><a href=\"/files/resume.pdf\">")
 		if err != nil {
 			return err
 		}
