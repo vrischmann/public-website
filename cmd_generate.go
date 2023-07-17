@@ -27,8 +27,9 @@ import (
 )
 
 type generateCommandConfig struct {
-	pagesDir string
-	buildDir string
+	pagesDir  string
+	assetsDir string
+	buildDir  string
 
 	logger *zap.Logger
 }
@@ -40,6 +41,7 @@ func newGenerateCmd() *ffcli.Command {
 
 	fs := flag.NewFlagSet("generate", flag.ExitOnError)
 	fs.StringVar(&cfg.pagesDir, "pages-directory", "./pages", "The directory where the markdown pages are stored")
+	fs.StringVar(&cfg.assetsDir, "assets-directory", "assets", "The directory where the asset files are stored")
 	fs.StringVar(&cfg.buildDir, "build-directory", "build", "The directory where the generated files will be stored")
 
 	return &ffcli.Command{
@@ -54,6 +56,76 @@ func newGenerateCmd() *ffcli.Command {
 func (c *generateCommandConfig) Exec(ctx context.Context, args []string) error {
 	generationDate := time.Now()
 
+	// Copy the assets with the proper hash
+	if err := c.copyAssets(ctx, generationDate); err != nil {
+		return err
+	}
+
+	// Generating the website pages
+	if err := c.generatePages(ctx, generationDate); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (c *generateCommandConfig) copyAssets(ctx context.Context, generationDate time.Time) error {
+	c.logger.Info("copying assets")
+
+	versionedExtensions := map[string]struct{}{
+		".css": {},
+		".js":  {},
+	}
+
+	err := filepath.WalkDir(c.assetsDir, func(inputPath string, d fs.DirEntry, err error) error {
+		if err != nil {
+			return err
+		}
+		if d.IsDir() {
+			return nil
+		}
+
+		outputPath := inputPath
+
+		// Rename versioned files
+		ext := filepath.Ext(inputPath)
+		if _, ok := versionedExtensions[ext]; ok {
+			name := d.Name()
+			name, _ = renameWithVersion(name, generationDate)
+			outputPath = filepath.Join(filepath.Dir(inputPath), name)
+		}
+
+		// Copy file
+
+		inputFile, err := os.Open(inputPath)
+		if err != nil {
+			return fmt.Errorf("unable to open file %q, err: %w", inputPath, err)
+		}
+		defer inputFile.Close()
+
+		outputFile, err := createOutputFile(c.buildDir, outputPath)
+		if err != nil {
+			return fmt.Errorf("unable to create file %q, err: %w", inputPath, err)
+		}
+		defer outputFile.Close()
+
+		if _, err := io.Copy(outputFile, inputFile); err != nil {
+			return fmt.Errorf("unable to copy data, err: %w", err)
+		}
+
+		if err := outputFile.Sync(); err != nil {
+			return fmt.Errorf("unable to sync output file, err: %w", err)
+		}
+
+		return nil
+	})
+
+	return err
+}
+
+func (c *generateCommandConfig) generatePages(ctx context.Context, generationDate time.Time) error {
+	c.logger.Info("collecting pages")
+
 	markdown := goldmark.New(
 		goldmark.WithParserOptions(goldmarkparser.WithAutoHeadingID()),
 		goldmark.WithRendererOptions(
@@ -64,29 +136,27 @@ func (c *generateCommandConfig) Exec(ctx context.Context, args []string) error {
 		),
 	)
 
-	c.logger.Info("collecting pages")
-
 	// Collect pages
 	allPages, err := collectPages(c.pagesDir, markdown.Parser())
 	if err != nil {
-		c.logger.Fatal("unable to collect pages", zap.Error(err))
+		return fmt.Errorf("unable to collect pages, err: %w", err)
 	}
 
 	// Process pages
 	for _, page := range allPages {
 		if err := page.generate(c.logger, generationDate, markdown.Renderer(), c.buildDir); err != nil {
-			c.logger.Fatal("unable to generate page", zap.Error(err))
+			return fmt.Errorf("unable to generate page, err: %w", err)
 		}
 	}
 
 	// Generate the blog index page
 	if err := generateBlogIndex(c.logger, generationDate, c.buildDir, allPages); err != nil {
-		c.logger.Fatal("unable to generate blog index", zap.Error(err))
+		return fmt.Errorf("unable to generate blog index, err: %w", err)
 	}
 
 	// Generate the resume page
 	if err := generateResume(c.logger, generationDate, markdown.Renderer(), c.buildDir, allPages); err != nil {
-		c.logger.Fatal("unable to generate blog index", zap.Error(err))
+		return fmt.Errorf("unable to generate blog index, err: %w", err)
 	}
 
 	return nil
@@ -113,7 +183,7 @@ func createOutputFile(buildRootDir string, path string) (*os.File, error) {
 		return nil, fmt.Errorf("unable to create directory tree, err: %w", err)
 	}
 
-	path = filepath.Join(buildRootDir, path) + ".html"
+	path = filepath.Join(buildRootDir, path)
 
 	f, err := os.Create(path)
 	if err != nil {
@@ -225,7 +295,7 @@ func (p page) generate(logger *zap.Logger, generationDate time.Time, renderer go
 
 	// Rendering page
 
-	f, err := createOutputFile(buildRootDir, p.path)
+	f, err := createOutputFile(buildRootDir, p.path+".html")
 	if err != nil {
 		return err
 	}
@@ -352,7 +422,7 @@ func generateBlogIndex(logger *zap.Logger, generationDate time.Time, buildRootDi
 
 	// Rendering page
 
-	f, err := createOutputFile(buildRootDir, "blog")
+	f, err := createOutputFile(buildRootDir, "blog.html")
 	if err != nil {
 		return err
 	}
@@ -419,7 +489,7 @@ func generateResume(logger *zap.Logger, generationDate time.Time, render goldmar
 
 	// Rendering page
 
-	f, err := createOutputFile(buildRootDir, "resume")
+	f, err := createOutputFile(buildRootDir, "resume.html")
 	if err != nil {
 		return err
 	}
@@ -448,9 +518,7 @@ func newAssets(generationDate time.Time) *assets {
 }
 
 func (a *assets) add(name string) {
-	ext := filepath.Ext(name)
-	nameWithoutExt := name[:len(name)-len(ext)]
-	newName := fmt.Sprintf("%s.%08x%s", nameWithoutExt, a.generationDate.Unix(), ext)
+	newName, ext := renameWithVersion(name, a.generationDate)
 
 	switch ext {
 	case ".css":
@@ -460,4 +528,13 @@ func (a *assets) add(name string) {
 	default:
 		panic(fmt.Errorf("invalid extension %q", ext))
 	}
+}
+
+func renameWithVersion(name string, generationDate time.Time) (string, string) {
+	ext := filepath.Ext(name)
+	nameWithoutExt := name[:len(name)-len(ext)]
+
+	newName := fmt.Sprintf("%s.%08x%s", nameWithoutExt, generationDate.Unix(), ext)
+
+	return newName, ext
 }
