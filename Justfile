@@ -1,6 +1,10 @@
-build:
+clean:
+	rm -rf build
+
+build: clean
 	templ generate ./...
 	go run go.rischmann.fr/website-generator generate
+	rsync -av files build/.
 	rsync -av --include="*.png" --include="*.pdf" --include="*/" --exclude="*" pages/ build/.
 
 watch-build:
