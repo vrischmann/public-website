@@ -2,6 +2,7 @@
 title: How I built zig-sqlite
 date: "2022 May 26"
 format: blog_entry
+require_prism: true
 ---
 
 # Introduction

@@ -2,6 +2,7 @@
 title: Virtual tables with zig-sqlite
 date: "2022 September 22"
 format: blog_entry
+require_prism: true
 ---
 
 # Introduction

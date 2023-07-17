@@ -44,9 +44,9 @@ templ Resume(skills templ.Component, experience []templ.Component, sideProjects 
 	</div>
 }
 
-templ ResumePage(title string, body templ.Component) {
+templ ResumePage(title string, assets Assets, body templ.Component) {
 	<html>
-		@headerComponent(title, nil)
+		@headerComponent(title, assets)
 		<script src="https://kit.fontawesome.com/bb474c1b63.js" crossorigin="anonymous"></script>
 		{! body }
 	</html>

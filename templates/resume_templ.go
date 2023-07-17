@@ -220,7 +220,7 @@ func Resume(skills templ.Component, experience []templ.Component, sideProjects t
 	})
 }
 
-func ResumePage(title string, body templ.Component) templ.Component {
+func ResumePage(title string, assets Assets, body templ.Component) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, w io.Writer) (err error) {
 		templBuffer, templIsBuffer := w.(*bytes.Buffer)
 		if !templIsBuffer {
@@ -237,7 +237,7 @@ func ResumePage(title string, body templ.Component) templ.Component {
 		if err != nil {
 			return err
 		}
-		err = headerComponent(title, nil).Render(ctx, templBuffer)
+		err = headerComponent(title, assets).Render(ctx, templBuffer)
 		if err != nil {
 			return err
 		}
