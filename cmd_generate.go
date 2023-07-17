@@ -52,6 +52,7 @@ func newGenerateCmd() *ffcli.Command {
 }
 
 func (c *generateCommandConfig) Exec(ctx context.Context, args []string) error {
+	generationDate := time.Now()
 
 	markdown := goldmark.New(
 		goldmark.WithParserOptions(goldmarkparser.WithAutoHeadingID()),
@@ -73,18 +74,18 @@ func (c *generateCommandConfig) Exec(ctx context.Context, args []string) error {
 
 	// Process pages
 	for _, page := range allPages {
-		if err := page.generate(c.logger, markdown.Renderer(), c.buildDir); err != nil {
+		if err := page.generate(c.logger, generationDate, markdown.Renderer(), c.buildDir); err != nil {
 			c.logger.Fatal("unable to generate page", zap.Error(err))
 		}
 	}
 
 	// Generate the blog index page
-	if err := generateBlogIndex(c.logger, c.buildDir, allPages); err != nil {
+	if err := generateBlogIndex(c.logger, generationDate, c.buildDir, allPages); err != nil {
 		c.logger.Fatal("unable to generate blog index", zap.Error(err))
 	}
 
 	// Generate the resume page
-	if err := generateResume(c.logger, markdown.Renderer(), c.buildDir, allPages); err != nil {
+	if err := generateResume(c.logger, generationDate, markdown.Renderer(), c.buildDir, allPages); err != nil {
 		c.logger.Fatal("unable to generate blog index", zap.Error(err))
 	}
 
@@ -171,14 +172,15 @@ type page struct {
 	metadata         pageMetadata     // found in the YAML header of the markdown page
 }
 
-func (p page) generate(logger *zap.Logger, renderer goldmarkrenderer.Renderer, buildRootDir string) error {
+func (p page) generate(logger *zap.Logger, generationDate time.Time, renderer goldmarkrenderer.Renderer, buildRootDir string) error {
 	ctx := context.Background()
 
-	assets := getDefaultAssets()
+	assets := newAssets(generationDate)
+	assets.add("style.css")
 
 	if v, ok := p.metadata.Extra["require_prism"]; ok && v.(bool) == true {
-		assets.CSS = append(assets.CSS, "prism.css")
-		assets.JS = append(assets.JS, "prism.js")
+		assets.add("prism.css")
+		assets.add("prism.js")
 	}
 
 	//
@@ -192,7 +194,7 @@ func (p page) generate(logger *zap.Logger, renderer goldmarkrenderer.Renderer, b
 			node:     p.markdownDocument,
 		}
 
-		page = templates.Page(p.metadata.Title, assets, content)
+		page = templates.Page(p.metadata.Title, assets.underlying, content)
 
 	case formatBlogEntry:
 		// Generate the ToC
@@ -214,7 +216,7 @@ func (p page) generate(logger *zap.Logger, renderer goldmarkrenderer.Renderer, b
 		}
 
 		blogContent := templates.BlogContent(p.metadata.Title, p.metadata.Date, tableOfContents, content)
-		page = templates.Page(p.metadata.Title, assets, blogContent)
+		page = templates.Page(p.metadata.Title, assets.underlying, blogContent)
 
 	default:
 		logger.Debug("skipping page, unknown format", zap.String("path", p.path))
@@ -311,10 +313,11 @@ func collectPages(rootDir string, parser goldmarkparser.Parser) (res []page, err
 	return res, err
 }
 
-func generateBlogIndex(logger *zap.Logger, buildRootDir string, pages pages) error {
+func generateBlogIndex(logger *zap.Logger, generationDate time.Time, buildRootDir string, pages pages) error {
 	ctx := context.Background()
 
-	assets := getDefaultAssets()
+	assets := newAssets(generationDate)
+	assets.add("style.css")
 
 	// Generate the index page
 
@@ -345,7 +348,7 @@ func generateBlogIndex(logger *zap.Logger, buildRootDir string, pages pages) err
 	})
 
 	blogIndex := templates.BlogIndex(blogItems)
-	page := templates.Page("Vincent Rischmann - Blog", assets, blogIndex)
+	page := templates.Page("Vincent Rischmann - Blog", assets.underlying, blogIndex)
 
 	// Rendering page
 
@@ -366,10 +369,11 @@ func generateBlogIndex(logger *zap.Logger, buildRootDir string, pages pages) err
 	return nil
 }
 
-func generateResume(logger *zap.Logger, render goldmarkrenderer.Renderer, buildRootDir string, pages pages) error {
+func generateResume(logger *zap.Logger, generationDate time.Time, render goldmarkrenderer.Renderer, buildRootDir string, pages pages) error {
 	ctx := context.Background()
 
-	assets := getDefaultAssets()
+	assets := newAssets(generationDate)
+	assets.add("style.css")
 
 	// Build the resume compoentns
 
@@ -411,7 +415,7 @@ func generateResume(logger *zap.Logger, render goldmarkrenderer.Renderer, buildR
 	}
 
 	resume := templates.Resume(skills, experience, sideProjects)
-	page := templates.ResumePage("Vincent Rischmann - Resume", assets, resume)
+	page := templates.ResumePage("Vincent Rischmann - Resume", assets.underlying, resume)
 
 	// Rendering page
 
@@ -432,9 +436,28 @@ func generateResume(logger *zap.Logger, render goldmarkrenderer.Renderer, buildR
 	return nil
 }
 
-func getDefaultAssets() templates.Assets {
-	var assets templates.Assets
-	assets.CSS = []string{"style.css"}
+type assets struct {
+	generationDate time.Time
+	underlying     templates.Assets
+}
 
-	return assets
+func newAssets(generationDate time.Time) *assets {
+	res := new(assets)
+	res.generationDate = generationDate
+	return res
+}
+
+func (a *assets) add(name string) {
+	ext := filepath.Ext(name)
+	nameWithoutExt := name[:len(name)-len(ext)]
+	newName := fmt.Sprintf("%s.%08x%s", nameWithoutExt, a.generationDate.Unix(), ext)
+
+	switch ext {
+	case ".css":
+		a.underlying.CSS = append(a.underlying.CSS, newName)
+	case ".js":
+		a.underlying.JS = append(a.underlying.JS, newName)
+	default:
+		panic(fmt.Errorf("invalid extension %q", ext))
+	}
 }
