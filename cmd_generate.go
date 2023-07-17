@@ -178,7 +178,7 @@ func (p page) generate(logger *zap.Logger, generationDate time.Time, renderer go
 	assets := newAssets(generationDate)
 	assets.add("style.css")
 
-	if v, ok := p.metadata.Extra["require_prism"]; ok && v.(bool) == true {
+	if v, ok := p.metadata.Extra["require_prism"]; ok && v.(bool) {
 		assets.add("prism.css")
 		assets.add("prism.js")
 	}
