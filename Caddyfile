@@ -16,4 +16,6 @@ handle /_internal/health {
 
 uri strip_suffix /
 try_files {path}.html
-file_server
+file_server {
+	browse
+}
