@@ -7,7 +7,7 @@ type Assets struct {
 
 templ cssAssets(assets Assets) {
 	for _, asset := range assets.CSS {
-		<link rel="stylesheet" type="text/css" href={ "/assets/"+asset } />
+		<link rel="stylesheet" type="text/css" href={ "/assets/"+asset }/>
 	}
 }
 
@@ -55,11 +55,7 @@ templ contentComponent(assets Assets, body templ.Component) {
 	</body>
 }
 
-
 templ Page(title string, assets Assets, body templ.Component) {
-	<html>
-		@headerComponent(title, assets)
-		@contentComponent(assets, body)
-	</html>
+	<html>@headerComponent(title, assets) @contentComponent(assets, body)</html>
 }
 
