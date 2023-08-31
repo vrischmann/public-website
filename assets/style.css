@@ -65,6 +65,10 @@ p {
     line-height: 1.45;
 }
 
+p:has(img) {
+    text-align: center;
+}
+
 h1 {
     display: block;
     font-size: 170%;
@@ -108,7 +112,8 @@ li {
 }
 
 img {
-    width: 100%;
+    width: auto;
+    max-width: 100%;
 }
 
 a {
