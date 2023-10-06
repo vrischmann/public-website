@@ -1,6 +1,6 @@
 module go.rischmann.fr/website-generator
 
-go 1.20
+go 1.21
 
 require (
 	github.com/a-h/templ v0.2.304
