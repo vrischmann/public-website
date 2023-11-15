@@ -6,13 +6,13 @@ import (
 )
 
 type BlogItem struct {
-	LinkURL string
+	LinkURL  string
 	LinkText string
-	Date time.Time
+	Date     time.Time
 }
 
 type BlogItems struct {
-	Year int
+	Year  int
 	Items []BlogItem
 }
 
@@ -41,4 +41,3 @@ templ BlogContent(title string, date time.Time, tableOfContents templ.Component,
 		{! content }
 	</div>
 }
-

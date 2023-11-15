@@ -2,7 +2,7 @@ package templates
 
 type Assets struct {
 	CSS []string
-	JS []string
+	JS  []string
 }
 
 templ cssAssets(assets Assets) {
@@ -56,6 +56,7 @@ templ contentComponent(assets Assets, body templ.Component) {
 }
 
 templ Page(title string, assets Assets, body templ.Component) {
-	<html>@headerComponent(title, assets) @contentComponent(assets, body)</html>
+	<html>@headerComponent(title, assets)
+@contentComponent(assets, body)
+</html>
 }
-
