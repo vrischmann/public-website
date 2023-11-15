@@ -14,6 +14,12 @@ build: clean gen-template
 	rsync -av files build/.
 	rsync -av --include="*.png" --include="*.pdf" --include="*/" --exclude="*" pages/ build/.
 
+fmt:
+	@printf "\x1b[34m===>\x1b[m  Running go fmt\n"
+	go fmt ./...
+	@printf "\x1b[34m===>\x1b[m  Running templ fmt\n"
+	go run {{tool_templ}} fmt .
+
 watch-build:
 	watchexec --print-events -e templ,css,js,md -w pages -w templates -w assets just build
 
