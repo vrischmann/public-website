@@ -407,6 +407,10 @@ func generateBlogIndex(logger *zap.Logger, generationDate time.Time, buildRootDi
 
 	var blogItems []templates.BlogItems
 	for year, items := range blogItemsPerYear {
+		slices.SortFunc(items, func(a, b templates.BlogItem) bool {
+			return a.Date.After(b.Date)
+		})
+
 		blogItems = append(blogItems, templates.BlogItems{
 			Year:  year,
 			Items: items,
@@ -414,7 +418,7 @@ func generateBlogIndex(logger *zap.Logger, generationDate time.Time, buildRootDi
 	}
 
 	slices.SortFunc(blogItems, func(a, b templates.BlogItems) bool {
-		return a.Year < b.Year
+		return a.Year > b.Year
 	})
 
 	blogIndex := templates.BlogIndex(blogItems)
