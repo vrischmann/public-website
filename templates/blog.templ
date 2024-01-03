@@ -36,8 +36,8 @@ templ BlogContent(title string, date time.Time, tableOfContents templ.Component,
 	</div>
 	<div class="article">
 		<nav class="blog-toc">
-			{! tableOfContents }
+			@tableOfContents
 		</nav>
-		{! content }
+		@content
 	</div>
 }

@@ -14,18 +14,18 @@ templ Resume(skills templ.Component, experience []templ.Component, sideProjects 
 			<p>I am a Staff engineer with 10+ years of experience building distributed systems, high-throughput webservices and data processing pipelines.</p>
 		</div>
 		<div class="resume-skills">
-			{! skills }
+			@skills
 		</div>
 		<div class="resume-experience">
 			<h2>Work experience</h2>
 			for _, workExperience := range experience {
 				<div class="work-experience">
-					{! workExperience }
+					@workExperience
 				</div>
 			}
 		</div>
 		<div class="resume-side-projects">
-			{! sideProjects }
+			@sideProjects
 		</div>
 		<div class="resume-interests">
 			<h2>Interests</h2>
@@ -48,6 +48,6 @@ templ ResumePage(title string, assets Assets, body templ.Component) {
 	<html>
 		@headerComponent(title, assets)
 		<script src="https://kit.fontawesome.com/bb474c1b63.js" crossorigin="anonymous"></script>
-		{! body }
+		@body
 	</html>
 }
