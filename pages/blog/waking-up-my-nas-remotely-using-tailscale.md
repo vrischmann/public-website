@@ -32,7 +32,7 @@ So I thought about a UI that I could open on my phone, click a button and be don
 
 Let’s start with the UI. Here’s a screenshot of the only page there is:
 
-![ui](./waking-up-my-nas-remotely-using-tailscale/ui.png)
+![ui](./waking-up-my-nas-remotely-using-tailscale/ui.avif)
 
 As I said before, dead simple. The “Wake up” button wakes up the NAS, the “Sleep” button tells the NAS to shut down.
 
@@ -48,7 +48,7 @@ These services need a way to communicate to each other, and this is where [Tails
 
 The following diagram shows the communication links:
 
-![nas_wol_tailnet.png](./waking-up-my-nas-remotely-using-tailscale//nas_wol_tailnet.png)
+![nas_wol_tailnet.avif](./waking-up-my-nas-remotely-using-tailscale//nas_wol_tailnet.avif)
 
 # The magic
 
@@ -67,7 +67,7 @@ I ran with this idea and made each of the three components I described earlier a
 
 Now that we know how services communicate with each other, let’s update the previous diagram to make it more accurate:
 
-![nas_wol_tailnet_services.png](./waking-up-my-nas-remotely-using-tailscale/nas_wol_tailnet_services.png)
+![nas_wol_tailnet_services.avif](./waking-up-my-nas-remotely-using-tailscale/nas_wol_tailnet_services.avif)
 
 Notice that services now talk directly to each other *except* for the *waker* service, that’s because it sends a WoL packet which is actually received by the NAS itself and not by any service I wrote.
 
@@ -79,11 +79,11 @@ Both requests are actually really simple to implement.
 
 When I’m asking to wake up the NAS the *waker* service will send a WoL packet to the MAC address of the NAS. The following sequence diagram shows the flow:
 
-![naspm_wakeup_sequence_diagram.png](./waking-up-my-nas-remotely-using-tailscale/naspm_wakeup_sequence_diagram.png)
+![naspm_wakeup_sequence_diagram.avif](./waking-up-my-nas-remotely-using-tailscale/naspm_wakeup_sequence_diagram.avif)
 
 When I’m asking to shut down the NAS the *sleeper* service will just run `systemctl poweroff`. This has the unfortunate side effect that the request will timeout on the UI side but I can live with that. The following sequence diagram shows the flow:
 
-![naspm_sleeper_sequence_diagram.png](./waking-up-my-nas-remotely-using-tailscale/naspm_sleeper_sequence_diagram.png)
+![naspm_sleeper_sequence_diagram.avif](./waking-up-my-nas-remotely-using-tailscale/naspm_sleeper_sequence_diagram.avif)
 
 # Conclusion
 
