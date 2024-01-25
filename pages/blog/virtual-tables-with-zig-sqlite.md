@@ -67,7 +67,7 @@ Thanks to virtual tables we get (almost) all the power of SQL to query the API a
 
 The implementation is simple: on each `SELECT` execution we fetch the town data from the API, store it locally in memory and then provide it to SQLite. The sequence diagram looks like this:
 
-![VTab APIDA.png](./virtual-tables-with-zig-sqlite/VTab_APIDA.png)
+![VTab APIDA.avif](./virtual-tables-with-zig-sqlite/VTab_APIDA.avif)
 
 If there are `WHERE` clauses we can optimize this by fetching a more specific URL (for example we can filter based on the département code or the town name).
 
@@ -99,7 +99,7 @@ user:20
 
 In this table we don’t fetch everything at once, instead we take advantange of the [`SCAN`](https://redis.io/commands/scan/) command to iterate over the keyspace to find users. Then when SQLite asks the virtual table for a specific column we use [`HGET`](https://redis.io/commands/hget/) to get the field data. The sequence diagram looks like this:
 
-![VTab User.png](./virtual-tables-with-zig-sqlite/VTab_User.png)
+![VTab User.avif](./virtual-tables-with-zig-sqlite/VTab_User.avif)
 
 Note that `hasNext` doesn’t always send a `SCAN` command: if the current Redis reply is not exhausted it simply uses it.
 
@@ -139,7 +139,7 @@ Since Zig doesn’t actually have traits or interfaces, we [validate at comptime
 
 Here is a diagram showing how this all fits together:
 
-![Implementation](./virtual-tables-with-zig-sqlite/Implementation.png)
+![Implementation](./virtual-tables-with-zig-sqlite/Implementation.avif)
 
 The yellow part is what the user must implement.
 
@@ -212,7 +212,7 @@ While this works I didn’t want the user to have to add the `sqlite3_vtab` or `
 
 The following diagram shows the internal types and their fields:
 
-![VTab State.png](./virtual-tables-with-zig-sqlite/VTab_State.png)
+![VTab State.avif](./virtual-tables-with-zig-sqlite/VTab_State.avif)
 
 Now it’s a matter of using `@fieldParentPtr` to get the `State` or `CursorState` object and have access to all their fields.
 
@@ -222,23 +222,23 @@ When you look at the [official documentation](https://sqlite.org/vtab.html) on v
 
 First let’s see how the table is initialized by SQLite:
 
-![Table_creation.png](./virtual-tables-with-zig-sqlite/Table_creation.png)
+![Table_creation.avif](./virtual-tables-with-zig-sqlite/Table_creation.avif)
 
 This happens either when you create a table using `CREATE VIRTUAL TABLE USING` or if you simply execute a query on an eponymous virtual table.
 
 Next, when you execute a `SELECT` statement SQLite calls the `xBestIndex` method to let the table build the *index information*. Let’s see how this works:
 
-![Table build best index.png](./virtual-tables-with-zig-sqlite/Table_build_best_index.png)
+![Table build best index.avif](./virtual-tables-with-zig-sqlite/Table_build_best_index.avif)
 
 This *index information* will be passed to `xFilter` along with the arguments that `buildBestIndex` decided to keep.
 
 Before filtering though SQLite has to initialize the cursor:
 
-![Table cursor init.png](./virtual-tables-with-zig-sqlite/Table_cursor_init.png)
+![Table cursor init.avif](./virtual-tables-with-zig-sqlite/Table_cursor_init.avif)
 
 Then SQLite calls `xFilter` on the cursor followed by calls to `xEof`, `xNext` and `xColumn` to iterate over the cursor:
 
-![Table cursor filter.png](./virtual-tables-with-zig-sqlite/Table_cursor_filter.png)
+![Table cursor filter.avif](./virtual-tables-with-zig-sqlite/Table_cursor_filter.avif)
 
 Finally when the cursor is exhausted SQLite calls `xClose`. The table is deinitialized when SQLite call `xDisconnect`.
 
@@ -258,7 +258,7 @@ Ultimately how you build your index identifier is up to you: SQLite doesn’t ca
 
 In “apida” we can only use constraints with the `=` operation because that’s what the upstream API supports, so the index identifier is just a list of column numbers, like this: `0|1|2`. The following diagram shows what the `filter` operation would get as input:
 
-![filter inputs.png](./virtual-tables-with-zig-sqlite/Table_cursor_filter_inputs.png)
+![filter inputs.avif](./virtual-tables-with-zig-sqlite/Table_cursor_filter_inputs.avif)
 
 Then it’s a simple matter of decoding the identifier and using the most appropriate constraint to get the data.
 
