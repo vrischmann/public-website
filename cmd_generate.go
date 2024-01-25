@@ -8,6 +8,7 @@ import (
 	"io/fs"
 	"os"
 	"path/filepath"
+	"strings"
 	"time"
 
 	"github.com/a-h/templ"
@@ -18,8 +19,10 @@ import (
 	goldmarkparser "github.com/yuin/goldmark/parser"
 	goldmarkrenderer "github.com/yuin/goldmark/renderer"
 	goldmarkhtml "github.com/yuin/goldmark/renderer/html"
-	"github.com/yuin/goldmark/text"
+	goldmarktext "github.com/yuin/goldmark/text"
+	goldmarkutil "github.com/yuin/goldmark/util"
 	goldmarktoc "go.abhg.dev/goldmark/toc"
+	"go.uber.org/multierr"
 	"go.uber.org/zap"
 	"golang.org/x/exp/slices"
 
@@ -56,8 +59,8 @@ func newGenerateCmd() *ffcli.Command {
 func (c *generateCommandConfig) Exec(ctx context.Context, args []string) error {
 	generationDate := time.Now()
 
-	// Copy the assets with the proper hash
-	if err := c.copyAssets(ctx, generationDate); err != nil {
+	// Copy all versioned files
+	if err := c.copyVersionedFiles(ctx, generationDate); err != nil {
 		return err
 	}
 
@@ -69,65 +72,119 @@ func (c *generateCommandConfig) Exec(ctx context.Context, args []string) error {
 	return nil
 }
 
-func (c *generateCommandConfig) copyAssets(ctx context.Context, generationDate time.Time) error {
-	c.logger.Info("copying assets")
+func (c *generateCommandConfig) copyVersionedFiles(ctx context.Context, generationDate time.Time) error {
+	c.logger.Info("copying files")
 
 	versionedExtensions := map[string]struct{}{
-		".css": {},
-		".js":  {},
+		".css":  {},
+		".js":   {},
+		".avif": {},
 	}
 
-	err := filepath.WalkDir(c.assetsDir, func(inputPath string, d fs.DirEntry, err error) error {
-		if err != nil {
-			return err
-		}
-		if d.IsDir() {
+	doCopy := func(dir string, stripPrefix string) error {
+		return filepath.WalkDir(dir, func(inputPath string, d fs.DirEntry, err error) error {
+			if err != nil {
+				return err
+			}
+			if d.IsDir() {
+				return nil
+			}
+
+			outputPath := inputPath
+
+			ext := filepath.Ext(inputPath)
+			if _, ok := versionedExtensions[ext]; ok {
+				// Rename and copy versioned files
+				name := d.Name()
+				name, _ = renameWithVersion(name, generationDate)
+
+				dir := strings.TrimPrefix(filepath.Dir(inputPath), stripPrefix)
+				outputPath = filepath.Join(dir, name)
+
+			} else {
+				// Not a file we want versioned, ignore
+				return nil
+			}
+
+			// Copy file
+
+			inputFile, err := os.Open(inputPath)
+			if err != nil {
+				return fmt.Errorf("unable to open file %q, err: %w", inputPath, err)
+			}
+			defer inputFile.Close()
+
+			outputFile, err := createOutputFile(c.buildDir, outputPath)
+			if err != nil {
+				return fmt.Errorf("unable to create file %q, err: %w", inputPath, err)
+			}
+			defer outputFile.Close()
+
+			if _, err := io.Copy(outputFile, inputFile); err != nil {
+				return fmt.Errorf("unable to copy data, err: %w", err)
+			}
+
+			if err := outputFile.Sync(); err != nil {
+				return fmt.Errorf("unable to sync output file, err: %w", err)
+			}
+
 			return nil
-		}
+		})
+	}
 
-		outputPath := inputPath
-
-		// Rename versioned files
-		ext := filepath.Ext(inputPath)
-		if _, ok := versionedExtensions[ext]; ok {
-			name := d.Name()
-			name, _ = renameWithVersion(name, generationDate)
-			outputPath = filepath.Join(filepath.Dir(inputPath), name)
-		}
-
-		// Copy file
-
-		inputFile, err := os.Open(inputPath)
-		if err != nil {
-			return fmt.Errorf("unable to open file %q, err: %w", inputPath, err)
-		}
-		defer inputFile.Close()
-
-		outputFile, err := createOutputFile(c.buildDir, outputPath)
-		if err != nil {
-			return fmt.Errorf("unable to create file %q, err: %w", inputPath, err)
-		}
-		defer outputFile.Close()
-
-		if _, err := io.Copy(outputFile, inputFile); err != nil {
-			return fmt.Errorf("unable to copy data, err: %w", err)
-		}
-
-		if err := outputFile.Sync(); err != nil {
-			return fmt.Errorf("unable to sync output file, err: %w", err)
-		}
-
-		return nil
-	})
-
-	return err
+	return multierr.Combine(
+		doCopy(c.assetsDir, ""),
+		doCopy(c.pagesDir, "pages/"),
+	)
 }
+
+// imageVersioningTransformer is a goldmarkast.ASTTransformer that changes the images destination to include a hash of the generation date.
+//
+// This is needed for cache busting.
+type imageVersioningTransformer struct {
+	generationDate time.Time
+}
+
+func newImageVersioningTransformer(generationDate time.Time) *imageVersioningTransformer {
+	return &imageVersioningTransformer{
+		generationDate: generationDate,
+	}
+}
+
+func (t *imageVersioningTransformer) Transform(node *goldmarkast.Document, reader goldmarktext.Reader, pc goldmarkparser.Context) {
+	seen := make(map[*goldmarkast.Image]struct{})
+
+	goldmarkast.Walk(node, func(n goldmarkast.Node, _ bool) (goldmarkast.WalkStatus, error) {
+		img, ok := n.(*goldmarkast.Image)
+		if !ok {
+			return goldmarkast.WalkContinue, nil
+		}
+
+		if _, ok := seen[img]; ok {
+			return goldmarkast.WalkContinue, nil
+		}
+
+		newFilename, _ := renameWithVersion(string(img.Destination), t.generationDate)
+		img.Destination = []byte(newFilename)
+
+		seen[img] = struct{}{}
+
+		return goldmarkast.WalkContinue, nil
+	})
+}
+
+var _ goldmarkparser.ASTTransformer = (*imageVersioningTransformer)(nil)
 
 func (c *generateCommandConfig) generatePages(ctx context.Context, generationDate time.Time) error {
 	c.logger.Info("collecting pages")
 
 	markdown := goldmark.New(
-		goldmark.WithParserOptions(goldmarkparser.WithAutoHeadingID()),
+		goldmark.WithParserOptions(
+			goldmarkparser.WithAutoHeadingID(),
+			goldmarkparser.WithASTTransformers(
+				goldmarkutil.Prioritized(newImageVersioningTransformer(generationDate), 100),
+			),
+		),
 		goldmark.WithRendererOptions(
 			goldmarkhtml.WithUnsafe(),
 		),
@@ -286,6 +343,7 @@ func (p page) generate(logger *zap.Logger, generationDate time.Time, renderer go
 		}
 
 		blogContent := templates.BlogContent(p.metadata.Title, p.metadata.Date, tableOfContents, content)
+
 		page = templates.Page(p.metadata.Title, assets.underlying, blogContent)
 
 	default:
@@ -346,7 +404,9 @@ func collectPages(rootDir string, parser goldmarkparser.Parser) (res []page, err
 			if err != nil {
 				return fmt.Errorf("unable to read file %q, err: %w", path, err)
 			}
-			document := parser.Parse(text.NewReader(data), goldmarkparser.WithContext(goldmarkContext))
+			document := parser.Parse(goldmarktext.NewReader(data),
+				goldmarkparser.WithContext(goldmarkContext),
+			)
 
 			page.sourceData = data
 			page.markdownDocument = document
