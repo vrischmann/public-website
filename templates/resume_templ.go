@@ -221,7 +221,7 @@ func Resume(skills templ.Component, experience []templ.Component, sideProjects t
 	})
 }
 
-func ResumePage(title string, assets Assets, body templ.Component) templ.Component {
+func ResumePage(headerParams HeaderParams, assets Assets, body templ.Component) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -238,7 +238,7 @@ func ResumePage(title string, assets Assets, body templ.Component) templ.Compone
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = headerComponent(title, assets).Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = headerComponent(headerParams, assets).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
