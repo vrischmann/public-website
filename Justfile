@@ -12,7 +12,7 @@ build: clean gen-template
 	@printf "\x1b[34m===>\x1b[m  Running website-generator generate\n"
 	go run go.rischmann.fr/website-generator generate
 	rsync -av files build/.
-	rsync -av --include="*.png" --include="*.pdf" --include="*/" --exclude="*" pages/ build/.
+	rsync -av --include="*.png" --include="*.avif" --include="*.pdf" --include="*/" --exclude="*" pages/ build/.
 
 fmt:
 	@printf "\x1b[34m===>\x1b[m  Running go fmt\n"
