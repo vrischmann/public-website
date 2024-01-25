@@ -56,7 +56,7 @@ templ contentComponent(assets Assets, body templ.Component) {
 }
 
 templ Page(title string, assets Assets, body templ.Component) {
-	<html>
+	<html lang="en">
 		@headerComponent(title, assets)
 		@contentComponent(assets, body)
 	</html>
