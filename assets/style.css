@@ -272,7 +272,7 @@ nav.blog-toc ul {
 
 @media all and (max-width: 580px) {
     nav.blog-toc ul li {
-        min-height: 48px;
+        margin: 20px;
     }
 }
 
