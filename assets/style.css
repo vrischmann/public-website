@@ -266,12 +266,12 @@ pre {
     font-size: 18px;
 }
 
-nav.blog-toc ul>li {
+nav.blog-toc ul {
     margin-bottom: 0;
 }
 
 @media all and (max-width: 580px) {
-    nav.blog-toc ul>li {
+    nav.blog-toc ul li {
         min-height: 48px;
     }
 }
