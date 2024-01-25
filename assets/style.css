@@ -261,9 +261,10 @@ pre {
     padding: 0;
 }
 
-.article-header>h4 {
+.article-header>h2 {
     grid-area: date;
     justify-self: right;
+    font-size: 18px;
 }
 
 nav.blog-toc li>ul {
