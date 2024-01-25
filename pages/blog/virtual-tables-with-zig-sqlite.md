@@ -1,5 +1,7 @@
 ---
 title: Virtual tables with zig-sqlite
+description: |
+    Article explaining how to use zig-sqlite (a Zig wrapper for SQLite) to build a virtual table for SQLite
 date: "2022 September 22"
 format: blog_entry
 require_prism: true

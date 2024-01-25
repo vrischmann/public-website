@@ -1,5 +1,7 @@
 ---
 title: How I built zig-sqlite
+description: |
+    Article explaining how to leverage Zig's compile time metaprogramming to build a SQLite wrapper that can type check SQL queries
 date: "2022 May 26"
 format: blog_entry
 require_prism: true

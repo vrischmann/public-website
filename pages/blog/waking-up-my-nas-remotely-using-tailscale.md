@@ -1,5 +1,7 @@
 ---
 title: Waking up my NAS remotely using Tailscale
+description:
+    Article explaining how to leverage Tailscale to build a system that can wake up a NAS that is not exposed to the internet.
 date: "2023 August 28"
 format: blog_entry
 ---

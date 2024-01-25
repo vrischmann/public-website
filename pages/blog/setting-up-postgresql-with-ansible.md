@@ -1,5 +1,7 @@
 ---
 title: Setting up PostgreSQL with Ansible
+description: |
+    Article explaining how to use Ansible to set up a PostgreSQL server and database on a remote server
 date: "2023 July 16"
 format: blog_entry
 require_prism: true
