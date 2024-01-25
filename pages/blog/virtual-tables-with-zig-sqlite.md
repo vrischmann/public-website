@@ -71,7 +71,7 @@ The implementation is simple: on each `SELECT` execution we fetch the town data 
 
 If there are `WHERE` clauses we can optimize this by fetching a more specific URL (for example we can filter based on the département code or the town name).
 
-The mechanism to do this in virtual tables is to implement the [`Table.buildBestIndex`](https://github.com/vrischmann/zig-sqlite-vtab-demo/blob/master/src/vtab_apida.zig#L142) and [`Table.Cursor.filter`](https://github.com/vrischmann/zig-sqlite-vtab-demo/blob/master/src/vtab_apida.zig#L193-L232) methods in zig-sqlite. This is explained in more detail [here](https://www.notion.so/Virtual-tables-with-zig-sqlite-3da67d9f42224635a1fc05d9789b9f73).
+The mechanism to do this in virtual tables is to implement the [`Table.buildBestIndex`](https://github.com/vrischmann/zig-sqlite-vtab-demo/blob/master/src/vtab_apida.zig#L142) and [`Table.Cursor.filter`](https://github.com/vrischmann/zig-sqlite-vtab-demo/blob/master/src/vtab_apida.zig#L193-L232) methods in zig-sqlite. This is explained in more detail [here](#building-and-using-the-best-index).
 
 This virtual table is also built as a [loadable extension](https://sqlite.org/loadext.html) (code [here](https://github.com/vrischmann/zig-sqlite-vtab-demo/blob/1d3939f82480787007b42d4ba7e946364938d7ac/src/vtab_apida_ext.zig)).
 
