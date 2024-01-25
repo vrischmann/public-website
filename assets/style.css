@@ -129,10 +129,9 @@ a:active {
 }
 
 a:hover {
-    background: #fbf3f3;
     transition-property: background;
     transition-duration: 0.2s;
-    border-radius: 10px;
+    text-decoration: underline;
 }
 
 pre {
