@@ -257,10 +257,11 @@ const (
 )
 
 type pageMetadata struct {
-	Title  string
-	Date   time.Time
-	Format string
-	Extra  map[string]any
+	Title       string
+	Description string
+	Date        time.Time
+	Format      string
+	Extra       map[string]any
 }
 
 func parsePageMetadata(metadata map[string]any) (pageMetadata, error) {
@@ -321,7 +322,14 @@ func (p page) generate(logger *zap.Logger, generationDate time.Time, renderer go
 			node:     p.markdownDocument,
 		}
 
-		page = templates.Page(p.metadata.Title, assets.underlying, content)
+		page = templates.Page(
+			templates.HeaderParams{
+				Title:       p.metadata.Title,
+				Description: p.metadata.Description,
+			},
+			assets.underlying,
+			content,
+		)
 
 	case formatBlogEntry:
 		// Generate the ToC
@@ -344,7 +352,14 @@ func (p page) generate(logger *zap.Logger, generationDate time.Time, renderer go
 
 		blogContent := templates.BlogContent(p.metadata.Title, p.metadata.Date, tableOfContents, content)
 
-		page = templates.Page(p.metadata.Title, assets.underlying, blogContent)
+		page = templates.Page(
+			templates.HeaderParams{
+				Title:       p.metadata.Title,
+				Description: p.metadata.Description,
+			},
+			assets.underlying,
+			blogContent,
+		)
 
 	default:
 		logger.Debug("skipping page, unknown format", zap.String("path", p.path))
@@ -482,7 +497,14 @@ func generateBlogIndex(logger *zap.Logger, generationDate time.Time, buildRootDi
 	})
 
 	blogIndex := templates.BlogIndex(blogItems)
-	page := templates.Page("Vincent Rischmann - Blog", assets.underlying, blogIndex)
+	page := templates.Page(
+		templates.HeaderParams{
+			Title:       "Vincent Rischmann - Blog",
+			Description: "",
+		},
+		assets.underlying,
+		blogIndex,
+	)
 
 	// Rendering page
 
@@ -549,7 +571,14 @@ func generateResume(logger *zap.Logger, generationDate time.Time, render goldmar
 	}
 
 	resume := templates.Resume(skills, experience, sideProjects)
-	page := templates.ResumePage("Vincent Rischmann - Resume", assets.underlying, resume)
+	page := templates.ResumePage(
+		templates.HeaderParams{
+			Title:       "Vincent Rischmann - Resume",
+			Description: "",
+		},
+		assets.underlying,
+		resume,
+	)
 
 	// Rendering page
 
