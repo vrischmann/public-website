@@ -59,7 +59,7 @@ When my device named “router” joins my tailnet, I can then resolve its IP on
 
 This might not seem like much but this means that I don’t have to maintain a nameserver myself and I can just hardcode the name in my service code.
 
-Now, I could have just made my services listen on their respective *device’s* IP but I was inspired by [this](https://tailscale.com/blog/tsnet-virtual-private-services/) blog post from Tailscale which explains how to build a *private service* with its own IP and name and everything. This uses the [tsnet](https://pkg.go.dev/tailscale.com/tsnet) Go library.
+Now, I could have just made my services listen on their respective *device’s* IP but I was inspired by [this blog post from Tailscale](https://tailscale.com/blog/tsnet-virtual-private-services/) which explains how to build a *private service* with its own IP and name and everything. This uses the [tsnet](https://pkg.go.dev/tailscale.com/tsnet) Go library.
 
 I ran with this idea and made each of the three components I described earlier a private service, with its own name:
 
