@@ -145,7 +145,7 @@ pre {
     border-radius: 3px;
     font-family: courier, monospace;
     font-size: 85%;
-    color: red;
+    color: #ec0000;
     padding: 0 3px;
     word-break: break-word;
 }
