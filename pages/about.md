@@ -1,5 +1,7 @@
 ---
 title: Vincent Rischmann - About
+description: |
+    Personal webpage for Vincent Rischmann
 format: standard
 ---
 

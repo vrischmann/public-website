@@ -1,5 +1,7 @@
 ---
 title: Vincent Rischmann - Code
+description: |
+    Index of personal, open source project built by Vincent Rischmann
 format: standard
 ---
 
