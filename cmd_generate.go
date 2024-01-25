@@ -276,6 +276,10 @@ func parsePageMetadata(metadata map[string]any) (pageMetadata, error) {
 		res.Title = tmp.(string)
 	}
 
+	if tmp, ok := res.Extra["description"]; ok {
+		res.Description = tmp.(string)
+	}
+
 	if tmp, ok := res.Extra["date"]; ok {
 		date, err := time.Parse("2006 January 02", tmp.(string))
 		if err != nil {
