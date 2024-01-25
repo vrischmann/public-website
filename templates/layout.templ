@@ -17,11 +17,19 @@ templ jsAssets(assets Assets) {
 	}
 }
 
-templ headerComponent(title string, assets Assets) {
+type HeaderParams struct {
+	Title       string
+	Description string
+}
+
+templ headerComponent(params HeaderParams, assets Assets) {
 	<head>
 		<meta charset="utf-8"/>
 		<meta name="viewport" content="width=device-width, initial-scale=1"/>
-		<title>{ title }</title>
+		if params.Description != "" {
+			<meta name="description" content={ params.Description }/>
+		}
+		<title>{ params.Title }</title>
 		@cssAssets(assets)
 		<link rel="shortcut icon" type="image/png" href="/assets/favicon.png"/>
 	</head>
@@ -55,10 +63,10 @@ templ contentComponent(assets Assets, body templ.Component) {
 	</body>
 }
 
-templ Page(title string, assets Assets, body templ.Component) {
+templ Page(headerParams HeaderParams, assets Assets, body templ.Component) {
 	<!DOCTYPE html>
 	<html lang="en">
-		@headerComponent(title, assets)
+		@headerComponent(headerParams, assets)
 		@contentComponent(assets, body)
 	</html>
 }
