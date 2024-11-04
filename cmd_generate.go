@@ -8,6 +8,7 @@ import (
 	"io/fs"
 	"os"
 	"path/filepath"
+	"slices"
 	"strings"
 	"time"
 
@@ -24,7 +25,6 @@ import (
 	goldmarktoc "go.abhg.dev/goldmark/toc"
 	"go.uber.org/multierr"
 	"go.uber.org/zap"
-	"golang.org/x/exp/slices"
 
 	"go.rischmann.fr/website-generator/templates"
 )
@@ -486,8 +486,8 @@ func generateBlogIndex(logger *zap.Logger, generationDate time.Time, buildRootDi
 
 	var blogItems []templates.BlogItems
 	for year, items := range blogItemsPerYear {
-		slices.SortFunc(items, func(a, b templates.BlogItem) bool {
-			return a.Date.After(b.Date)
+		slices.SortFunc(items, func(a, b templates.BlogItem) int {
+			return a.Date.Compare(b.Date)
 		})
 
 		blogItems = append(blogItems, templates.BlogItems{
@@ -496,8 +496,8 @@ func generateBlogIndex(logger *zap.Logger, generationDate time.Time, buildRootDi
 		})
 	}
 
-	slices.SortFunc(blogItems, func(a, b templates.BlogItems) bool {
-		return a.Year > b.Year
+	slices.SortFunc(blogItems, func(a, b templates.BlogItems) int {
+		return b.Year - a.Year
 	})
 
 	blogIndex := templates.BlogIndex(blogItems)
