@@ -4,7 +4,7 @@ go 1.21
 
 require (
 	github.com/a-h/templ v0.2.793
-	github.com/peterbourgon/ff/v3 v3.3.2
+	github.com/peterbourgon/ff/v3 v3.4.0
 	github.com/yuin/goldmark v1.4.13
 	github.com/yuin/goldmark-meta v1.1.0
 	go.abhg.dev/goldmark/toc v0.4.0
