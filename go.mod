@@ -1,6 +1,8 @@
 module go.rischmann.fr/website-generator
 
-go 1.21
+go 1.22.0
+
+toolchain go1.23.2
 
 require (
 	github.com/a-h/templ v0.2.793
@@ -10,12 +12,12 @@ require (
 	go.abhg.dev/goldmark/toc v0.10.0
 	go.uber.org/multierr v1.11.0
 	go.uber.org/zap v1.27.0
-	golang.org/x/exp v0.0.0-20230626212559-97b1e661b5df
-	golang.org/x/tools v0.24.0
+	golang.org/x/exp v0.0.0-20241009180824-f66d83c29e7c
+	golang.org/x/tools v0.26.0
 )
 
 require (
-	golang.org/x/mod v0.20.0 // indirect
+	golang.org/x/mod v0.21.0 // indirect
 	golang.org/x/sync v0.8.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
