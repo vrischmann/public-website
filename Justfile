@@ -20,8 +20,15 @@ fmt:
 	@printf "\x1b[34m===>\x1b[m  Running templ fmt\n"
 	go run {{tool_templ}} fmt .
 
+convert-images:
+	@printf "\x1b[34m===>\x1b[m  Running 'magick convert' for all png files\n"
+	fd -e png -x magick {} {.}.avif
+
+watch-convert-images:
+	watchexec --print-events -e png -w pages just convert-images
+
 watch-build:
-	watchexec --print-events -e templ,css,js,md -w pages -w templates -w assets just build
+	watchexec --print-events -e templ,css,js,md,avif -w pages -w templates -w assets just build
 
 docker_dev: build
 	docker compose up --build
