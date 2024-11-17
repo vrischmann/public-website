@@ -120,6 +120,8 @@ func (c *generateCommandConfig) copyVersionedFiles(ctx context.Context, generati
 			}
 			defer outputFile.Close()
 
+			c.logger.Sugar().Debugf("copying file %q to %q", inputFile.Name(), outputFile.Name())
+
 			if _, err := io.Copy(outputFile, inputFile); err != nil {
 				return fmt.Errorf("unable to copy data, err: %w", err)
 			}
