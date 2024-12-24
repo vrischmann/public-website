@@ -247,7 +247,7 @@ pre {
 
 .article-header {
     display: grid;
-    grid-template-columns: auto 0.3fr;
+    grid-template-columns: auto auto;
     grid-template-areas: 'title date';
     margin-top: 20px;
     margin-bottom: 20px;
@@ -262,8 +262,11 @@ pre {
 
 .article-header>h2 {
     grid-area: date;
+    align-self: center;
     justify-self: right;
     font-size: 18px;
+    margin: 0;
+    padding: 0;
 }
 
 nav.blog-toc ul {
