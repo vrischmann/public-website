@@ -287,11 +287,11 @@ nav.blog-toc ul {
     margin-bottom: 0;
 }
 
-@media all and (max-width: 580px) {
-    nav.blog-toc ul li {
-        margin: 20px;
-    }
-}
+/* @media all and (max-width: 580px) { */
+/*     nav.blog-toc ul li { */
+/*         margin: 20px; */
+/*     } */
+/* } */
 
 /* Resume */
 
