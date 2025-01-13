@@ -34,6 +34,9 @@ watch-convert-images:
 watch-build:
 	watchexec --print-events -e templ,css,js,md,avif -w pages -w templates -w assets just build
 
+watch-build-dev:
+	watchexec --print-events -e templ,css,js,md,avif -w pages -w templates -w assets just build-dev
+
 docker_dev: build
 	docker compose up --build
 
