@@ -269,6 +269,20 @@ pre {
     padding: 0;
 }
 
+@media all and (max-width:840px) {
+    .article-header {
+        grid-template-rows: auto auto;
+        grid-template-areas:
+            'title'
+            'date';
+    }
+    .article-header>h2 {
+        justify-self: left;
+        margin-top: 0.3em;
+    }
+}
+
+
 nav.blog-toc ul {
     margin-bottom: 0;
 }
