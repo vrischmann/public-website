@@ -205,11 +205,14 @@ pre {
     grid-template-columns: auto;
     grid-template-rows: 40px auto 30px;
     grid-template-areas: 'header' 'content' 'footer';
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1em;
+    padding-right: 1em;
 }
 
 .container .content {
     grid-area: content;
-    padding: 1rem 0rem 5rem 0;
 }
 
 @media all and (max-width: 520px) {
