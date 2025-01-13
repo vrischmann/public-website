@@ -13,6 +13,11 @@ build: clean gen-template
 	go run go.rischmann.fr/website-generator generate
 	rsync -av files build/.
 
+build-dev: clean gen-template
+	@printf "\x1b[34m===>\x1b[m  Running website-generator generate --no-assets-versioning\n"
+	go run go.rischmann.fr/website-generator generate --no-assets-versioning
+	rsync -av files build/.
+
 fmt:
 	@printf "\x1b[34m===>\x1b[m  Running go fmt\n"
 	go fmt ./...

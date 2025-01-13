@@ -34,6 +34,8 @@ type generateCommandConfig struct {
 	assetsDir string
 	buildDir  string
 
+	noAssetsVersioning bool
+
 	logger *zap.Logger
 }
 
@@ -46,6 +48,7 @@ func newGenerateCmd() *ffcli.Command {
 	fs.StringVar(&cfg.pagesDir, "pages-directory", "./pages", "The directory where the markdown pages are stored")
 	fs.StringVar(&cfg.assetsDir, "assets-directory", "assets", "The directory where the asset files are stored")
 	fs.StringVar(&cfg.buildDir, "build-directory", "build", "The directory where the generated files will be stored")
+	fs.BoolVar(&cfg.noAssetsVersioning, "no-assets-versioning", false, "Disable assets versioning")
 
 	return &ffcli.Command{
 		Name:       "generate",
@@ -57,7 +60,10 @@ func newGenerateCmd() *ffcli.Command {
 }
 
 func (c *generateCommandConfig) Exec(ctx context.Context, args []string) error {
-	generationDate := time.Now()
+	var generationDate time.Time
+	if !c.noAssetsVersioning {
+		generationDate = time.Now()
+	}
 
 	// Copy all versioned files
 	if err := c.copyVersionedFiles(ctx, generationDate); err != nil {
@@ -96,7 +102,10 @@ func (c *generateCommandConfig) copyVersionedFiles(ctx context.Context, generati
 			if _, ok := versionedExtensions[ext]; ok {
 				// Rename and copy versioned files
 				name := d.Name()
-				name, _ = renameWithVersion(name, generationDate)
+
+				if !generationDate.IsZero() {
+					name, _ = renameWithVersion(name, generationDate)
+				}
 
 				dir := strings.TrimPrefix(filepath.Dir(inputPath), stripPrefix)
 				outputPath = filepath.Join(dir, name)
@@ -617,7 +626,13 @@ func newAssets(generationDate time.Time) *assets {
 }
 
 func (a *assets) add(name string) {
-	newName, ext := renameWithVersion(name, a.generationDate)
+	var newName, ext string
+	if a.generationDate.IsZero() {
+		ext = filepath.Ext(name)
+		newName = name
+	} else {
+		newName, ext = renameWithVersion(name, a.generationDate)
+	}
 
 	switch ext {
 	case ".css":
