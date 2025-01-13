@@ -226,6 +226,10 @@ pre {
 
 .container .content {
     grid-area: content;
+
+    display: grid;
+    grid-auto-flow: row;
+    row-gap: 0.6em;
 }
 
 @media all and (max-width: 520px) {
