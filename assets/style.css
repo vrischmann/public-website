@@ -154,7 +154,6 @@ pre {
     grid-auto-flow: column;
     grid-auto-columns: max-content;
     column-gap: 1.3em;
-    padding: 0.5rem 0 0.5rem 0;
     border-bottom: 0.1em solid black;
     margin: 0;
 }
@@ -205,6 +204,7 @@ pre {
     grid-template-columns: auto;
     grid-template-rows: 40px auto 30px;
     grid-template-areas: 'header' 'content' 'footer';
+    row-gap: 1em;
     margin-left: auto;
     margin-right: auto;
     padding-left: 1em;
@@ -218,7 +218,6 @@ pre {
 @media all and (max-width: 520px) {
     .content {
         padding: 0;
-        padding-bottom: 2rem;
     }
 }
 
