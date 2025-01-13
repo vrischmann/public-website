@@ -30,9 +30,10 @@ import (
 )
 
 type generateCommandConfig struct {
-	pagesDir  string
-	assetsDir string
-	buildDir  string
+	pagesDir   string
+	assetsDir  string
+	assetsOnly bool
+	buildDir   string
 
 	logger *zap.Logger
 }
@@ -45,6 +46,7 @@ func newGenerateCmd() *ffcli.Command {
 	fs := flag.NewFlagSet("generate", flag.ExitOnError)
 	fs.StringVar(&cfg.pagesDir, "pages-directory", "./pages", "The directory where the markdown pages are stored")
 	fs.StringVar(&cfg.assetsDir, "assets-directory", "assets", "The directory where the asset files are stored")
+	fs.BoolVar(&cfg.assetsOnly, "assets-only", false, "Build only the assets")
 	fs.StringVar(&cfg.buildDir, "build-directory", "build", "The directory where the generated files will be stored")
 
 	return &ffcli.Command{
@@ -64,6 +66,11 @@ func (c *generateCommandConfig) Exec(ctx context.Context, args []string) error {
 		return err
 	}
 
+	// Stop if we don't want to build the pages
+	if c.assetsOnly {
+		return nil
+	}
+
 	// Generating the website pages
 	if err := c.generatePages(ctx, generationDate); err != nil {
 		return err
@@ -72,7 +79,7 @@ func (c *generateCommandConfig) Exec(ctx context.Context, args []string) error {
 	return nil
 }
 
-func (c *generateCommandConfig) copyVersionedFiles(ctx context.Context, generationDate time.Time) error {
+func (c *generateCommandConfig) copyVersionedFiles(_ context.Context, generationDate time.Time) error {
 	c.logger.Info("copying files")
 
 	versionedExtensions := map[string]struct{}{

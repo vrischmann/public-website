@@ -14,6 +14,10 @@ build: clean gen-template
 	rsync -av files build/.
 	rsync -av --include="*.pdf" --include="*/" --exclude="*" pages/ build/.
 
+build-assets:
+	@printf "\x1b[34m===>\x1b[m  Running website-generator generate --assets-only\n"
+	go run go.rischmann.fr/website-generator generate --assets-only
+
 fmt:
 	@printf "\x1b[34m===>\x1b[m  Running go fmt\n"
 	go fmt ./...
@@ -29,6 +33,9 @@ watch-convert-images:
 
 watch-build:
 	watchexec --print-events -e templ,css,js,md,avif -w pages -w templates -w assets just build
+
+watch-build-assets:
+	watchexec --print-events -e css,js -w assets just build-assets
 
 docker_dev: build
 	docker compose up --build
