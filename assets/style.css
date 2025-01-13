@@ -180,7 +180,7 @@ pre {
     column-gap: 1.3em;
     border-bottom: 0.1em solid black;
     margin: 0;
-    padding: 0;
+    padding: 0 0 0.4em 0;
 }
 
 .container>header>ul>li>a {
