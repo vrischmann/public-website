@@ -264,8 +264,6 @@ pre {
     display: grid;
     grid-template-columns: auto auto;
     grid-template-areas: 'title date';
-    margin-top: 20px;
-    margin-bottom: 20px;
     align-items: center;
 }
 
