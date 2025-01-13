@@ -208,7 +208,7 @@ func contentComponent(assets Assets, body templ.Component) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 12, "</main><footer><ul><li><a href=\"https://github.com/vrischmann\">GitHub</a></li><li><a rel=\"me\" href=\"https://hachyderm.io/@vrischmann\">Mastodon</a></li><li><a href=\"mailto:vincent@rischmann.fr\">Email</a></li><li><a href=\"https://www.linkedin.com/in/vrischmann/\">LinkedIn</a></li><li><a href=\"https://twitter.com/vrischmann\">Twitter</a></li></ul></footer></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 12, "</main><footer><ul><li><a href=\"https://github.com/vrischmann\">GitHub</a></li><li><a href=\"mailto:vincent@rischmann.fr\">Email</a></li><li><a href=\"https://www.linkedin.com/in/vrischmann/\">LinkedIn</a></li></ul></footer></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
