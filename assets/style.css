@@ -139,6 +139,10 @@ pre {
     font-family: courier, monospace;
 }
 
+pre>code {
+    overflow-wrap: anywhere;
+}
+
 :not(pre)>code {
     hyphens: none;
     border-radius: 3px;
@@ -159,8 +163,8 @@ pre {
     row-gap: 1em;
     margin-left: auto;
     margin-right: auto;
-    padding-left: 1em;
-    padding-right: 1em;
+    padding-left: 0.7em;
+    padding-right: 0.7em;
 }
 
 .container>header {
