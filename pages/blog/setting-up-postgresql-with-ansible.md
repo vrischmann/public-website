@@ -9,7 +9,7 @@ require_prism: true
 
 # Introduction
 
-This post will describe in depth how to install and configure PostgreSQL in a single-node deployment using Ansible.
+This post will describe in-depth how to install and configure PostgreSQL in a single-node deployment using Ansible.
 
 Note that I assume the reader has some basic knowledge of Ansible, Ansible Vault and PostgreSQL.
 
@@ -23,7 +23,7 @@ The minimum requirements are:
 - configuring PostgreSQL
 - creating databases, schemas, users and assigning privileges
 
-At the end of the article we should have a minimal playbook that does this.
+At the end of the article, we should have a minimal playbook that does this.
 
 # Control node setup
 
