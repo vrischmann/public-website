@@ -137,6 +137,7 @@ a:hover {
 pre {
     font-size: 0.75rem;
     font-family: courier, monospace;
+    margin-bottom: 1em;
 }
 
 pre>code {
