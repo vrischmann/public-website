@@ -237,6 +237,9 @@ type markdownHTMLComponent struct {
 }
 
 func (c markdownHTMLComponent) Render(ctx context.Context, w io.Writer) error {
+	if c.node == nil {
+		return nil
+	}
 	return c.renderer.Render(w, c.source, c.node)
 }
 
