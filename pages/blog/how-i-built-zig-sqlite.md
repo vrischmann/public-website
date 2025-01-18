@@ -32,7 +32,7 @@ This blog post will focus on how I used *comptime* to implement these features.
 
 # What is `comptime`
 
-Let’s start by seing what `comptime` actually is.
+Let’s start by seeing what `comptime` actually is.
 
 `comptime` is Zig’s way of defining code that must evaluate to something known at *compile-time*.
 
