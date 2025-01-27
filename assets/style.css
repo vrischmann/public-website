@@ -141,7 +141,7 @@ pre {
 }
 
 pre>code {
-    overflow-wrap: anywhere;
+    white-space: pre-wrap;
 }
 
 :not(pre)>code {
@@ -151,7 +151,7 @@ pre>code {
     font-size: 85%;
     color: #ec0000;
     padding: 0 3px;
-    word-break: break-word;
+    white-space: pre-wrap;
 }
 
 /* Container */
