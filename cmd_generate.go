@@ -507,8 +507,9 @@ func generateBlogIndex(logger *slog.Logger, generationDate time.Time, buildRootD
 
 	var blogItems []templates.BlogItems
 	for year, items := range blogItemsPerYear {
+		// Reverse sort, we want from most to least recent
 		slices.SortFunc(items, func(a, b templates.BlogItem) int {
-			return a.Date.Compare(b.Date)
+			return b.Date.Compare(a.Date)
 		})
 
 		blogItems = append(blogItems, templates.BlogItems{
