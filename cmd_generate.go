@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"io/fs"
+	"log/slog"
 	"os"
 	"path/filepath"
 	"slices"
@@ -24,7 +25,6 @@ import (
 	goldmarkutil "github.com/yuin/goldmark/util"
 	goldmarktoc "go.abhg.dev/goldmark/toc"
 	"go.uber.org/multierr"
-	"go.uber.org/zap"
 
 	"go.rischmann.fr/website-generator/templates"
 )
@@ -36,12 +36,12 @@ type generateCommandConfig struct {
 
 	noAssetsVersioning bool
 
-	logger *zap.Logger
+	logger *slog.Logger
 }
 
-func newGenerateCmd() *ffcli.Command {
+func newGenerateCmd(logger *slog.Logger) *ffcli.Command {
 	cfg := generateCommandConfig{
-		logger: zap.L(),
+		logger: logger,
 	}
 
 	fs := flag.NewFlagSet("generate", flag.ExitOnError)
@@ -129,7 +129,10 @@ func (c *generateCommandConfig) copyVersionedFiles(ctx context.Context, generati
 			}
 			defer outputFile.Close()
 
-			c.logger.Sugar().Debugf("copying file %q to %q", inputFile.Name(), outputFile.Name())
+			c.logger.Debug("copying file",
+				slog.String("source", inputFile.Name()),
+				slog.String("target", outputFile.Name()),
+			)
 
 			if _, err := io.Copy(outputFile, inputFile); err != nil {
 				return fmt.Errorf("unable to copy data, err: %w", err)
@@ -318,7 +321,7 @@ type page struct {
 	metadata         pageMetadata     // found in the YAML header of the markdown page
 }
 
-func (p page) generate(logger *zap.Logger, generationDate time.Time, renderer goldmarkrenderer.Renderer, buildRootDir string) error {
+func (p page) generate(logger *slog.Logger, generationDate time.Time, renderer goldmarkrenderer.Renderer, buildRootDir string) error {
 	ctx := context.Background()
 
 	assets := newAssets(generationDate)
@@ -380,7 +383,7 @@ func (p page) generate(logger *zap.Logger, generationDate time.Time, renderer go
 		)
 
 	default:
-		logger.Debug("skipping page, unknown format", zap.String("path", p.path))
+		logger.Debug("skipping page, unknown format", slog.String("path", p.path))
 		return nil
 	}
 
@@ -393,8 +396,8 @@ func (p page) generate(logger *zap.Logger, generationDate time.Time, renderer go
 	defer f.Close()
 
 	logger.Info("generating file",
-		zap.String("path", p.path),
-		zap.String("output_path", f.Name()),
+		slog.String("path", p.path),
+		slog.String("output_path", f.Name()),
 	)
 
 	if err := page.Render(ctx, f); err != nil {
@@ -476,7 +479,7 @@ func collectPages(rootDir string, parser goldmarkparser.Parser) (res []page, err
 	return res, err
 }
 
-func generateBlogIndex(logger *zap.Logger, generationDate time.Time, buildRootDir string, pages pages) error {
+func generateBlogIndex(logger *slog.Logger, generationDate time.Time, buildRootDir string, pages pages) error {
 	ctx := context.Background()
 
 	assets := newAssets(generationDate)
@@ -533,7 +536,7 @@ func generateBlogIndex(logger *zap.Logger, generationDate time.Time, buildRootDi
 	defer f.Close()
 
 	logger.Info("generating blog index",
-		zap.String("output_path", f.Name()),
+		slog.String("output_path", f.Name()),
 	)
 
 	if err := page.Render(ctx, f); err != nil {
@@ -543,7 +546,7 @@ func generateBlogIndex(logger *zap.Logger, generationDate time.Time, buildRootDi
 	return nil
 }
 
-func generateResume(logger *zap.Logger, generationDate time.Time, render goldmarkrenderer.Renderer, buildRootDir string, pages pages) error {
+func generateResume(logger *slog.Logger, generationDate time.Time, render goldmarkrenderer.Renderer, buildRootDir string, pages pages) error {
 	ctx := context.Background()
 
 	assets := newAssets(generationDate)
@@ -607,7 +610,7 @@ func generateResume(logger *zap.Logger, generationDate time.Time, render goldmar
 	defer f.Close()
 
 	logger.Info("generating resume",
-		zap.String("output_path", f.Name()),
+		slog.String("output_path", f.Name()),
 	)
 
 	if err := page.Render(ctx, f); err != nil {

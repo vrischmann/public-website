@@ -5,20 +5,16 @@ import (
 	"errors"
 	"flag"
 	"fmt"
-	"log"
+	"log/slog"
 	"os"
 
 	"github.com/peterbourgon/ff/v3/ffcli"
-	"go.uber.org/zap"
 )
 
 func main() {
-	zapConfig := zap.NewDevelopmentConfig()
-	logger, err := zapConfig.Build()
-	if err != nil {
-		log.Fatal(err)
-	}
-	zap.ReplaceGlobals(logger)
+	logger := slog.New(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{
+		AddSource: false,
+	}))
 
 	//
 
@@ -30,14 +26,14 @@ func main() {
 				return flag.ErrHelp
 			},
 		}
-		generateCmd = newGenerateCmd()
+		generateCmd = newGenerateCmd(logger)
 	)
 
 	rootCmd.Subcommands = []*ffcli.Command{
 		generateCmd,
 	}
 
-	err = rootCmd.ParseAndRun(context.Background(), os.Args[1:])
+	err := rootCmd.ParseAndRun(context.Background(), os.Args[1:])
 	switch {
 	case errors.Is(err, flag.ErrHelp):
 		os.Exit(1)
