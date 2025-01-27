@@ -166,6 +166,10 @@ func newImageVersioningTransformer(generationDate time.Time) *imageVersioningTra
 }
 
 func (t *imageVersioningTransformer) Transform(node *goldmarkast.Document, reader goldmarktext.Reader, pc goldmarkparser.Context) {
+	if t.generationDate.IsZero() {
+		return
+	}
+
 	seen := make(map[*goldmarkast.Image]struct{})
 
 	goldmarkast.Walk(node, func(n goldmarkast.Node, _ bool) (goldmarkast.WalkStatus, error) {
