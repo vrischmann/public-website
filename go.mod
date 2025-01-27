@@ -9,7 +9,6 @@ require (
 	github.com/yuin/goldmark-meta v1.1.0
 	go.abhg.dev/goldmark/toc v0.10.0
 	go.uber.org/multierr v1.11.0
-	go.uber.org/zap v1.27.0
 	golang.org/x/tools v0.29.0
 )
 
