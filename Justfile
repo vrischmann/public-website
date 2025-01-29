@@ -1,4 +1,4 @@
-tool_templ := "github.com/a-h/templ/cmd/templ@vendor_lsp"
+tool_templ := "github.com/a-h/templ/cmd/templ@main"
 
 clean:
 	rm -rf build
