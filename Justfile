@@ -1,11 +1,9 @@
-tool_templ := "github.com/a-h/templ/cmd/templ@latest"
-
 clean:
 	rm -rf build
 
 gen-template:
 	@printf "\x1b[34m===>\x1b[m  Running templ generate\n"
-	@go run {{tool_templ}} generate
+	@go tool templ generate
 
 build: clean gen-template
 	@printf "\x1b[34m===>\x1b[m  Running website-generator generate\n"
@@ -21,7 +19,7 @@ fmt:
 	@printf "\x1b[34m===>\x1b[m  Running go fmt\n"
 	go fmt ./...
 	@printf "\x1b[34m===>\x1b[m  Running templ fmt\n"
-	go run {{tool_templ}} fmt .
+	go tool templ fmt .
 
 convert-images:
 	@printf "\x1b[34m===>\x1b[m  Running 'magick convert' for all png files\n"
