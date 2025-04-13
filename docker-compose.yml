@@ -4,5 +4,10 @@ services:
       context: .
       args:
         caddyfile: Caddyfile
+    develop:
+      watch:
+        - { action: sync, path: ./assets, target: /srv/assets }
+        - { action: sync, path: ./build, target: /srv/build }
+        - { action: sync, path: ./files, target: /srv/build/files }
     ports:
       - "2015:2015"
