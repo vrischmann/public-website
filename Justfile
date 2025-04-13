@@ -12,7 +12,7 @@ build: clean gen-template
 	go run go.rischmann.fr/website-generator generate
 	rsync -av files build/.
 
-build-dev: clean gen-template
+build-dev: gen-template
 	@printf "\x1b[34m===>\x1b[m  Running website-generator generate --no-assets-versioning\n"
 	go run go.rischmann.fr/website-generator generate --no-assets-versioning
 	rsync -av files build/.
@@ -37,7 +37,7 @@ watch-build-dev:
 	watchexec --print-events -e templ,css,js,md,avif -w pages -w templates -w assets just build-dev
 
 docker_dev: build
-	docker compose up --build
+	docker compose up --build --watch
 
 deploy: build
 	rsync -avz --delete build/. wevo.rischmann.fr:/data/website/.
