@@ -4,6 +4,7 @@ description:
     Article talking about how shared libraries work on Linux
 date: "2025 January 18"
 format: blog_entry
+require_prism: true
 ---
 
 I'm currently working on upgrading the build script for [zig-sqlite](https://github.com/vrischmann/zig-sqlite) and learned something about shared libraries and musl.
