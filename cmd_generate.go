@@ -495,9 +495,14 @@ func generateBlogIndex(logger *slog.Logger, generationDate time.Time, buildRootD
 	for _, page := range pages.getAll(formatBlogEntry) {
 		year := page.metadata.Date.Year()
 
+		linkURL := page.path
+		if linkURL[0] != '/' {
+			linkURL = "/" + linkURL
+		}
+
 		items := blogItemsPerYear[year]
 		items = append(items, templates.BlogItem{
-			LinkURL:  page.path,
+			LinkURL:  linkURL,
 			LinkText: page.metadata.Title,
 			Date:     page.metadata.Date,
 		})
