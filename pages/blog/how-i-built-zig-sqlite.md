@@ -65,8 +65,16 @@ pub fn main() anyerror!void {
     const user_name: []const u8 = "Vincent";
 
     // Insert some data
-    try db.exec("INSERT INTO user(id, age, name) VALUES($id{usize}, $age{u32}, $name{[]const u8})", .{}, .{ @as(usize, 10), @as(u32, 34), user_name });
-    try db.exec("INSERT INTO user(id, age, name) VALUES($id{usize}, $age{u32}, $name{[]const u8})", .{}, .{ @as(usize, 20), @as(u32, 84), @as([]const u8, "José") });
+    try db.exec("INSERT INTO user(id, age, name) VALUES($id{usize}, $age{u32}, $name{[]const u8})", .{}, .{
+        @as(usize, 10),
+        @as(u32, 34),
+        user_name,
+    });
+    try db.exec("INSERT INTO user(id, age, name) VALUES($id{usize}, $age{u32}, $name{[]const u8})", .{}, .{
+        @as(usize, 20),
+        @as(u32, 84),
+        @as([]const u8, "José"),
+    });
 
     // Read one row into a struct
     const User = struct {
