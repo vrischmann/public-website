@@ -304,6 +304,17 @@ pre>code {
     }
 }
 
+@media all {
+    .article img {
+        max-width: 70%;
+    }
+}
+
+@media all and (max-width: 840px) {
+    .article img {
+        max-width: 100%;
+    }
+}
 
 nav.blog-toc ul {
     margin-bottom: 0;
