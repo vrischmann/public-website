@@ -17,13 +17,13 @@ Well, one thing I didn't realize until today was that shared libraries built wit
 
 This incompatibility hit me today because I've been testing my changes with the `native-linux` target which defaults to using musl instead of glibc, and while the build is successful the shared library doesn't work with glibc.
 You can see this with `ldd`:
-```
+```bash
 $ ldd zig-out/lib/libzigcrypto.so
 zig-out/lib/libzigcrypto.so: error while loading shared libraries: /lib64/libc.so: invalid ELF header
 ```
 
 In my case, I saw this error too when trying to load the extension with `sqlite3`:
-```
+```bash
 $ sqlite3
 SQLite version 3.46.1 2024-08-13 09:16:08
 sqlite> .load ./zig-out/lib/libzigcrypto
