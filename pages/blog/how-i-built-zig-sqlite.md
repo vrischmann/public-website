@@ -211,7 +211,7 @@ Thanks to Zig’s *type reflection* we can read a row of data into a user-provid
 
 Let’s go back to the example in the demo:
 
-```c
+```zig
 const User = struct {
     id: usize,
     age: u32,
@@ -227,7 +227,7 @@ Notice we pass the type as first parameter. This type is ultimately used to crea
 
 So the meat of the code is in the iterator and it starts in [`nextAlloc`](https://github.com/vrischmann/zig-sqlite/blob/f32017ea460d00f0dd3ac134f64131a1dab93b44/sqlite.zig#L1124-L1207). The first step is to get the *type info* of the user type with [`@typeInfo`](https://ziglang.org/documentation/0.9.1/#typeInfo): this returns a value of type [`std.builtin.Type`](https://github.com/ziglang/zig/blob/326b2aa27bdf43b695798192e415db995ee9918b/lib/std/builtin.zig#L193) which is a tagged union we can analyse using a simple switch statement, for example:
 
-```c
+```zig
 switch (@typeInfo(UserType)) {
     .Int => processInt(),
     .Optional => processOptional(),
@@ -252,7 +252,7 @@ Finally the result of the `readField` call is [assigned to the field](https://gi
 
 It’s important to remember that all these steps are done at *compile-time*; the code in the final binary would do something like this (not real code):
 
-```c
+```zig
 const user = User{
     .id = try stmt.readInt(usize, 1),
     .age = try stmt.readInt(u32, 2),
@@ -264,7 +264,7 @@ const user = User{
 
 I already demoed this before but here’s reading into a struct:
 
-```c
+```zig
 const User = struct {
     id: usize,
     age: u32,
@@ -278,7 +278,7 @@ const user_opt = try db.oneAlloc(User, std.testing.allocator, "SELECT id, age, n
 
 You can also read a single type:
 
-```c
+```zig
 const age_opt = try db.one(usize, "SELECT age FROM user WHERE name = $name{[]const u8}", .{}, .{
     .name = user_name,
 });
@@ -288,7 +288,7 @@ Note we’re not using the `oneAlloc` method here since we don’t need to alloc
 
 We also support reading into enums but this is a little more involved:
 
-```c
+```zig
 const Foo = enum(u7) {
     pub const BaseType = u16;
 
@@ -307,7 +307,7 @@ Next we convert the `u16` value to a `Foo` enum value.
 
 We can also use the `BaseType` to store the enum value as a string:
 
-```c
+```zig
 const Foo = enum {
     pub const BaseType = []const u8;
 
