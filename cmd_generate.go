@@ -7,6 +7,7 @@ import (
 	"io"
 	"io/fs"
 	"log/slog"
+	"maps"
 	"os"
 	"path/filepath"
 	"slices"
@@ -289,9 +290,7 @@ func parsePageMetadata(metadata map[string]any) (pageMetadata, error) {
 	var res pageMetadata
 	res.Extra = make(map[string]any)
 
-	for k, v := range metadata {
-		res.Extra[k] = v
-	}
+	maps.Copy(res.Extra, metadata)
 
 	if tmp, ok := res.Extra["title"]; ok {
 		res.Title = tmp.(string)
