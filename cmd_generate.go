@@ -2,7 +2,7 @@ package main
 
 import (
 	"context"
-	"flag"
+
 	"fmt"
 	"io"
 	"io/fs"
@@ -15,7 +15,7 @@ import (
 	"time"
 
 	"github.com/a-h/templ"
-	"github.com/peterbourgon/ff/v3/ffcli"
+	"github.com/spf13/cobra"
 	"github.com/yuin/goldmark"
 	goldmarkmeta "github.com/yuin/goldmark-meta"
 	goldmarkast "github.com/yuin/goldmark/ast"
@@ -40,24 +40,25 @@ type generateCommandConfig struct {
 	logger *slog.Logger
 }
 
-func newGenerateCmd(logger *slog.Logger) *ffcli.Command {
-	cfg := generateCommandConfig{
+func newGenerateCmd(logger *slog.Logger) *cobra.Command {
+	cfg := &generateCommandConfig{
 		logger: logger,
 	}
 
-	fs := flag.NewFlagSet("generate", flag.ExitOnError)
-	fs.StringVar(&cfg.pagesDir, "pages-directory", "./pages", "The directory where the markdown pages are stored")
-	fs.StringVar(&cfg.assetsDir, "assets-directory", "assets", "The directory where the asset files are stored")
-	fs.StringVar(&cfg.buildDir, "build-directory", "build", "The directory where the generated files will be stored")
-	fs.BoolVar(&cfg.noAssetsVersioning, "no-assets-versioning", false, "Disable assets versioning")
-
-	return &ffcli.Command{
-		Name:       "generate",
-		ShortUsage: "generate [flags]",
-		ShortHelp:  "generate the website",
-		FlagSet:    fs,
-		Exec:       cfg.Exec,
+	cmd := &cobra.Command{
+		Use:   "generate",
+		Short: "generate the website",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return cfg.Exec(context.Background(), args)
+		},
 	}
+
+	cmd.Flags().StringVar(&cfg.pagesDir, "pages-directory", "./pages", "The directory where the markdown pages are stored")
+	cmd.Flags().StringVar(&cfg.assetsDir, "assets-directory", "assets", "The directory where the asset files are stored")
+	cmd.Flags().StringVar(&cfg.buildDir, "build-directory", "build", "The directory where the generated files will be stored")
+	cmd.Flags().BoolVar(&cfg.noAssetsVersioning, "no-assets-versioning", false, "Disable assets versioning")
+
+	return cmd
 }
 
 func (c *generateCommandConfig) Exec(ctx context.Context, args []string) error {
