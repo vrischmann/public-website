@@ -1,4 +1,5 @@
 tool_templ := "github.com/a-h/templ/cmd/templ@latest"
+tool_goimports := "golang.org/x/tools/cmd/goimports@latest"
 
 clean:
 	rm -rf build
@@ -19,7 +20,11 @@ build-dev: gen-template
 
 fmt:
 	@printf "\x1b[34m===>\x1b[m  Running go fmt\n"
-	go fmt ./...
+	gofmt -s -w .
+
+	@printf "\x1b[34m===>\x1b[m  Running goimports\n"
+	go run {{tool_goimports}} -local dev.rischmann.fr -w .
+
 	@printf "\x1b[34m===>\x1b[m  Running templ fmt\n"
 	go run {{tool_templ}} fmt .
 
