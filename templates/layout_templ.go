@@ -175,7 +175,7 @@ func headerComponent(params HeaderParams, assets Assets) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 11, "<link rel=\"shortcut icon\" type=\"image/png\" href=\"/assets/favicon.png\"><script>\n\t\t\tconst theme = localStorage.getItem(\"theme\") || (window.matchMedia(\"(prefers-color-scheme: dark)\").matches ? \"dark\" : \"light\");\n\t\t\tdocument.documentElement.setAttribute(\"data-theme\", theme);\n\t\t</script></head>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 11, "<link rel=\"shortcut icon\" type=\"image/png\" href=\"/assets/favicon.png\"></head>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -204,7 +204,7 @@ func contentComponent(assets Assets, body templ.Component) templ.Component {
 			templ_7745c5c3_Var8 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 12, "<body><div class=\"container\"><header><ul><li><a href=\"/code\">/Code</a></li><li><a href=\"/blog\">/Blog</a></li><li><a href=\"/about\">/About</a></li><li><a href=\"/resume\">/Resume</a></li><li><button id=\"theme-toggle\">Toggle theme</button></li></ul></header><main class=\"content\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 12, "<body><div class=\"container\"><header><ul><li><a href=\"/code\">/Code</a></li><li><a href=\"/blog\">/Blog</a></li><li><a href=\"/about\">/About</a></li><li><a href=\"/resume\">/Resume</a></li><li><button id=\"theme-toggle\"><span class=\"theme-icon\"></span></button></li></ul></header><main class=\"content\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
