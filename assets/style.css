@@ -1,3 +1,19 @@
+:root {
+    --background-color: #fff;
+    --text-color: #000;
+    --link-color: blue;
+    --header-border-color: #000;
+    --code-background-color: #eee;
+}
+
+[data-theme="dark"] {
+    --background-color: #121212;
+    --text-color: #fff;
+    --link-color: #bb86fc;
+    --header-border-color: #fff;
+    --code-background-color: #333;
+}
+
 @media all {
     html {
         font-size: 24px;
@@ -43,6 +59,8 @@ html {
 }
 
 body {
+    background-color: var(--background-color);
+    color: var(--text-color);
     padding: 0rem 0em 0rem 0em;
     margin-left: auto;
     margin-right: auto;
@@ -118,10 +136,9 @@ img {
 
 a {
     text-decoration: none;
-    color: inherit;
+    color: var(--link-color);
     transition-property: background;
     transition-duration: 0.2s;
-    color: blue;
 }
 
 a:active {
@@ -138,6 +155,9 @@ pre {
     font-size: 0.75rem;
     font-family: courier, monospace;
     margin-bottom: 1em;
+    background-color: var(--code-background-color);
+    padding: 1em;
+    border-radius: 5px;
 }
 
 pre>code {
@@ -183,7 +203,7 @@ pre>code {
     grid-auto-flow: column;
     grid-auto-columns: max-content;
     column-gap: 1.3em;
-    border-bottom: 0.1em solid black;
+    border-bottom: 0.1em solid var(--header-border-color);
     margin: 0;
     padding: 0 0 0.4em 0;
 }
@@ -215,7 +235,7 @@ pre>code {
 
 .container>header>ul>li>a,
 .container>footer>ul>li>a {
-    color: black;
+    color: var(--text-color);
 }
 
 .container>footer>ul>li>a::after,
@@ -488,4 +508,13 @@ nav.blog-toc ul {
     list-style-type: none;
     margin: 0;
     padding: 0;
+}
+
+#theme-toggle {
+    background-color: transparent;
+    border: 1px solid var(--text-color);
+    color: var(--text-color);
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 5px;
 }

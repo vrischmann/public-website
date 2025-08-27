@@ -33,6 +33,10 @@ templ headerComponent(params HeaderParams, assets Assets) {
 		<title>{ params.Title }</title>
 		@cssAssets(assets)
 		<link rel="shortcut icon" type="image/png" href="/assets/favicon.png"/>
+		<script>
+			const theme = localStorage.getItem("theme") || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+			document.documentElement.setAttribute("data-theme", theme);
+		</script>
 	</head>
 }
 
@@ -45,6 +49,7 @@ templ contentComponent(assets Assets, body templ.Component) {
 					<li><a href="/blog">/Blog</a></li>
 					<li><a href="/about">/About</a></li>
 					<li><a href="/resume">/Resume</a></li>
+					<li><button id="theme-toggle">Toggle theme</button></li>
 				</ul>
 			</header>
 			<main class="content">
