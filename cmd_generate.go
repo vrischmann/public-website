@@ -330,7 +330,7 @@ func (p page) generate(logger *slog.Logger, generationDate time.Time, renderer g
 
 	assets := newAssets(generationDate)
 	assets.add("style.css")
-	assets.add("dark-mode.js")
+	assets.add("app.js")
 
 	if v, ok := p.metadata.Extra["require_prism"]; ok && v.(bool) {
 		assets.add("prism.css")
