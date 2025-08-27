@@ -1,17 +1,21 @@
 :root {
     --background-color: #fff;
     --text-color: #000;
+    --text-secondary: #667;
     --link-color: blue;
     --header-border-color: #000;
     --code-background-color: #eee;
+    --bg-gray-focus: rgba(0, 0, 0, 0.1);
 }
 
 [data-theme="dark"] {
     --background-color: #121212;
     --text-color: #fff;
+    --text-secondary: #888;
     --link-color: #bb86fc;
     --header-border-color: #fff;
     --code-background-color: #333;
+    --bg-gray-focus: rgba(255, 255, 255, 0.1);
 }
 
 @media all {
@@ -511,10 +515,29 @@ nav.blog-toc ul {
 }
 
 #theme-toggle {
-    background-color: transparent;
+    background: none;
     border: none;
-    color: var(--text-color);
-    padding: 5px 10px;
+    color: var(--text-secondary);
+    font-size: 1.2em;
     cursor: pointer;
-    border-radius: 5px;
+    padding: 0.4em 0.6em;
+    border-radius: 4px;
+    transition:
+        background 0.18s,
+        color 0.18s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#theme-toggle:hover,
+#theme-toggle:focus {
+    background: var(--bg-gray-focus);
+    color: var(--link-color);
+    outline: none;
+}
+
+.theme-icon {
+    display: block;
+    font-size: 1em;
 }
