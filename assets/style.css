@@ -512,7 +512,7 @@ nav.blog-toc ul {
 
 #theme-toggle {
     background-color: transparent;
-    border: 1px solid var(--text-color);
+    border: none;
     color: var(--text-color);
     padding: 5px 10px;
     cursor: pointer;
