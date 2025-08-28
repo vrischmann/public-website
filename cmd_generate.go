@@ -489,6 +489,7 @@ func generateBlogIndex(logger *slog.Logger, generationDate time.Time, buildRootD
 
 	assets := newAssets(generationDate)
 	assets.add("style.css")
+	assets.add("app.js")
 
 	// Generate the index page
 
@@ -562,6 +563,7 @@ func generateResume(logger *slog.Logger, generationDate time.Time, render goldma
 
 	assets := newAssets(generationDate)
 	assets.add("style.css")
+	assets.add("app.js")
 
 	// Build the resume compoentns
 
