@@ -204,12 +204,16 @@ pre>code {
 
 .container>header>ul {
     display: grid;
-    grid-auto-flow: column;
-    grid-auto-columns: max-content;
+    grid-template-columns: repeat(5, max-content) 1fr;
     column-gap: 1.3em;
     border-bottom: 0.1em solid var(--header-border-color);
     margin: 0;
     padding: 0 0 0.4em 0;
+    align-items: center;
+}
+
+.container>header>ul>li:last-child {
+    justify-self: end;
 }
 
 .container>header>ul>li>a {
@@ -520,7 +524,7 @@ nav.blog-toc ul {
     color: var(--text-secondary);
     font-size: 1.2em;
     cursor: pointer;
-    padding: 0.4em 0.6em;
+    padding: 0;
     border-radius: 4px;
     transition:
         background 0.18s,
