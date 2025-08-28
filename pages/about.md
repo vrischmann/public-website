@@ -11,4 +11,4 @@ Most of my professional code is either in Go or Java, depending on the project.
 
 My open source and hobby code is either in Go, Rust or Zig.
 
-Besides coding, I spend most of my time gaming, walking and running, and watching TV shows.
+Besides coding, I spend most of my time running and walking, gaming, and watching movies and TV shows.
