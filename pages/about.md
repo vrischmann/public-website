@@ -5,10 +5,10 @@ description: |
 format: standard
 ---
 
-I am a staff engineer at [Batch](https://batch.com), working on the backend side of our platform.
+I'm a staff engineer at [Batch](https://batch.com), working on backend stuff.
 
-Most of my professional code is either in Go or Java, depending on the project.
+I mostly code in Go or Java professionally, depending on the project.
 
-My open source and hobby code is either in Go, Rust or Zig.
+For fun, I code in Go, Rust, or Zig.
 
 Besides coding, I spend most of my time running and walking, gaming, and watching movies and TV shows.
