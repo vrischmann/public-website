@@ -148,9 +148,14 @@ func (c *generateCommandConfig) copyVersionedFiles(ctx context.Context, generati
 		})
 	}
 
+	pagesStripPrefix := ""
+	if c.pagesDir != "." {
+		pagesStripPrefix = filepath.Base(c.pagesDir) + "/"
+	}
+
 	return multierr.Combine(
 		doCopy(c.assetsDir, ""),
-		doCopy(c.pagesDir, "pages/"),
+		doCopy(c.pagesDir, pagesStripPrefix),
 	)
 }
 
@@ -233,7 +238,7 @@ func (c *generateCommandConfig) generatePages(ctx context.Context, generationDat
 
 	// Generate the resume page
 	if err := generateResume(c.logger, generationDate, markdown.Renderer(), c.buildDir, allPages); err != nil {
-		return fmt.Errorf("unable to generate blog index, err: %w", err)
+		return fmt.Errorf("unable to generate resume, err: %w", err)
 	}
 
 	return nil
@@ -294,23 +299,39 @@ func parsePageMetadata(metadata map[string]any) (pageMetadata, error) {
 	maps.Copy(res.Extra, metadata)
 
 	if tmp, ok := res.Extra["title"]; ok {
-		res.Title = tmp.(string)
+		if title, ok := tmp.(string); ok {
+			res.Title = title
+		} else {
+			return pageMetadata{}, fmt.Errorf("invalid `title` value %v, should be a string", tmp)
+		}
 	}
 
 	if tmp, ok := res.Extra["description"]; ok {
-		res.Description = tmp.(string)
+		if desc, ok := tmp.(string); ok {
+			res.Description = desc
+		} else {
+			return pageMetadata{}, fmt.Errorf("invalid `description` value %v, should be a string", tmp)
+		}
 	}
 
 	if tmp, ok := res.Extra["date"]; ok {
-		date, err := time.Parse("2006 January 02", tmp.(string))
-		if err != nil {
-			return pageMetadata{}, fmt.Errorf("invalid `date` value %q, should be a date in the `2006 Jan 02` format", tmp)
+		if dateStr, ok := tmp.(string); ok {
+			date, err := time.Parse("2006 January 02", dateStr)
+			if err != nil {
+				return pageMetadata{}, fmt.Errorf("invalid `date` value %q, should be a date in the `2006 Jan 02` format", dateStr)
+			}
+			res.Date = date
+		} else {
+			return pageMetadata{}, fmt.Errorf("invalid `date` value %v, should be a string", tmp)
 		}
-		res.Date = date
 	}
 
 	if tmp, ok := res.Extra["format"]; ok {
-		res.Format = tmp.(string)
+		if format, ok := tmp.(string); ok {
+			res.Format = format
+		} else {
+			return pageMetadata{}, fmt.Errorf("invalid `format` value %v, should be a string", tmp)
+		}
 	}
 
 	return res, nil
@@ -329,12 +350,22 @@ func (p page) generate(logger *slog.Logger, generationDate time.Time, renderer g
 	ctx := context.Background()
 
 	assets := newAssets(generationDate)
-	assets.add("style.css")
-	assets.add("app.js")
+	if err := assets.add("style.css"); err != nil {
+		return err
+	}
+	if err := assets.add("app.js"); err != nil {
+		return err
+	}
 
-	if v, ok := p.metadata.Extra["require_prism"]; ok && v.(bool) {
-		assets.add("prism.css")
-		assets.add("prism.js")
+	if v, ok := p.metadata.Extra["require_prism"]; ok {
+		if requirePrism, ok := v.(bool); ok && requirePrism {
+			if err := assets.add("prism.css"); err != nil {
+				return err
+			}
+			if err := assets.add("prism.js"); err != nil {
+				return err
+			}
+		}
 	}
 
 	//
@@ -488,8 +519,12 @@ func generateBlogIndex(logger *slog.Logger, generationDate time.Time, buildRootD
 	ctx := context.Background()
 
 	assets := newAssets(generationDate)
-	assets.add("style.css")
-	assets.add("app.js")
+	if err := assets.add("style.css"); err != nil {
+		return err
+	}
+	if err := assets.add("app.js"); err != nil {
+		return err
+	}
 
 	// Generate the index page
 
@@ -562,8 +597,12 @@ func generateResume(logger *slog.Logger, generationDate time.Time, render goldma
 	ctx := context.Background()
 
 	assets := newAssets(generationDate)
-	assets.add("style.css")
-	assets.add("app.js")
+	if err := assets.add("style.css"); err != nil {
+		return err
+	}
+	if err := assets.add("app.js"); err != nil {
+		return err
+	}
 
 	// Build the resume compoentns
 
@@ -644,7 +683,7 @@ func newAssets(generationDate time.Time) *assets {
 	return res
 }
 
-func (a *assets) add(name string) {
+func (a *assets) add(name string) error {
 	var newName, ext string
 	if a.generationDate.IsZero() {
 		ext = filepath.Ext(name)
@@ -659,8 +698,9 @@ func (a *assets) add(name string) {
 	case ".js":
 		a.underlying.JS = append(a.underlying.JS, newName)
 	default:
-		panic(fmt.Errorf("invalid extension %q", ext))
+		return fmt.Errorf("unsupported asset extension %q for file %q", ext, name)
 	}
+	return nil
 }
 
 func renameWithVersion(name string, generationDate time.Time) (string, string) {
