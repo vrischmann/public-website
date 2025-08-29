@@ -350,21 +350,13 @@ func (p page) generate(logger *slog.Logger, generationDate time.Time, renderer g
 	ctx := context.Background()
 
 	assets := newAssets(generationDate)
-	if err := assets.add("style.css"); err != nil {
-		return err
-	}
-	if err := assets.add("app.js"); err != nil {
-		return err
-	}
+	assets.add("style.css")
+	assets.add("app.js")
 
 	if v, ok := p.metadata.Extra["require_prism"]; ok {
 		if requirePrism, ok := v.(bool); ok && requirePrism {
-			if err := assets.add("prism.css"); err != nil {
-				return err
-			}
-			if err := assets.add("prism.js"); err != nil {
-				return err
-			}
+			assets.add("prism.css")
+			assets.add("prism.js")
 		}
 	}
 
@@ -519,12 +511,8 @@ func generateBlogIndex(logger *slog.Logger, generationDate time.Time, buildRootD
 	ctx := context.Background()
 
 	assets := newAssets(generationDate)
-	if err := assets.add("style.css"); err != nil {
-		return err
-	}
-	if err := assets.add("app.js"); err != nil {
-		return err
-	}
+	assets.add("style.css")
+	assets.add("app.js")
 
 	// Generate the index page
 
@@ -597,12 +585,8 @@ func generateResume(logger *slog.Logger, generationDate time.Time, render goldma
 	ctx := context.Background()
 
 	assets := newAssets(generationDate)
-	if err := assets.add("style.css"); err != nil {
-		return err
-	}
-	if err := assets.add("app.js"); err != nil {
-		return err
-	}
+	assets.add("style.css")
+	assets.add("app.js")
 
 	// Build the resume compoentns
 
@@ -683,7 +667,7 @@ func newAssets(generationDate time.Time) *assets {
 	return res
 }
 
-func (a *assets) add(name string) error {
+func (a *assets) add(name string) {
 	var newName, ext string
 	if a.generationDate.IsZero() {
 		ext = filepath.Ext(name)
@@ -698,9 +682,8 @@ func (a *assets) add(name string) error {
 	case ".js":
 		a.underlying.JS = append(a.underlying.JS, newName)
 	default:
-		return fmt.Errorf("unsupported asset extension %q for file %q", ext, name)
+		panic(fmt.Errorf("unsupported asset extension %q for file %q", ext, name))
 	}
-	return nil
 }
 
 func renameWithVersion(name string, generationDate time.Time) (string, string) {
