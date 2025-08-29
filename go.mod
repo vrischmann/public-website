@@ -5,9 +5,9 @@ go 1.25.0
 require (
 	github.com/a-h/templ v0.3.943
 	github.com/spf13/cobra v1.9.1
-	github.com/yuin/goldmark v1.7.8
+	github.com/yuin/goldmark v1.7.13
 	github.com/yuin/goldmark-meta v1.1.0
-	go.abhg.dev/goldmark/toc v0.10.0
+	go.abhg.dev/goldmark/toc v0.12.0
 	go.uber.org/multierr v1.11.0
 )
 
