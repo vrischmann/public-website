@@ -80,7 +80,7 @@ func (c *generateCommandConfig) Exec(ctx context.Context, args []string) error {
 	return nil
 }
 
-func (c *generateCommandConfig) copyVersionedFiles(ctx context.Context, generationDate time.Time) error {
+func (c *generateCommandConfig) copyVersionedFiles(_ context.Context, generationDate time.Time) error {
 	c.logger.Info("copying files")
 
 	versionedExtensions := map[string]struct{}{
@@ -200,7 +200,7 @@ func (t *imageVersioningTransformer) Transform(node *goldmarkast.Document, reade
 
 var _ goldmarkparser.ASTTransformer = (*imageVersioningTransformer)(nil)
 
-func (c *generateCommandConfig) generatePages(ctx context.Context, generationDate time.Time) error {
+func (c *generateCommandConfig) generatePages(_ context.Context, generationDate time.Time) error {
 	c.logger.Info("collecting pages")
 
 	markdown := goldmark.New(
