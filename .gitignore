@@ -1,3 +1,4 @@
 /cv/*.pdf
 /build
 website-generator
+/node_modules
