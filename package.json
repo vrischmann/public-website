@@ -1,0 +1,11 @@
+{
+  "name": "public-website",
+  "version": "1.0.0",
+  "description": "Vincent Rischmann's personal website",
+  "scripts": {
+    "fmt:css": "prettier --write \"assets/**/*.css\""
+  },
+  "devDependencies": {
+    "prettier": "^3.0.0"
+  }
+}
