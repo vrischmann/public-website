@@ -5,6 +5,8 @@
     --link-color: blue;
     --header-border-color: #000;
     --code-background-color: #eee;
+    --code-text-color: #ec0000;
+    --accent-color: #d21c1c;
     --bg-gray-focus: rgba(0, 0, 0, 0.1);
 }
 
@@ -15,6 +17,8 @@
     --link-color: #bb86fc;
     --header-border-color: #fff;
     --code-background-color: #333;
+    --code-text-color: #ff6b6b;
+    --accent-color: #ff4757;
     --bg-gray-focus: rgba(255, 255, 255, 0.1);
 }
 
@@ -116,7 +120,7 @@ h3 {
 aside {
     font-size: 0.84rem;
     line-height: 1.40;
-    color: #667;
+    color: var(--text-secondary);
 }
 
 aside em {
@@ -173,7 +177,7 @@ pre>code {
     border-radius: 3px;
     font-family: courier, monospace;
     font-size: 85%;
-    color: #ec0000;
+    color: var(--code-text-color);
     padding: 0 3px;
     white-space: pre-wrap;
 }
@@ -254,7 +258,7 @@ pre>code {
     font-size: 80%;
     top: -0.3em;
     left: -0.1em;
-    color: #d21c1c;
+    color: var(--accent-color);
 }
 
 .container .content {
