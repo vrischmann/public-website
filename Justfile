@@ -45,4 +45,4 @@ docker_dev: build
 	docker compose up --build --watch
 
 deploy: build
-	rsync -avz --delete build/. wevo.rischmann.fr:/data/website/.
+	./deploy.sh

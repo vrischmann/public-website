@@ -126,6 +126,34 @@ just deploy         # Deploy to production server
 
 ## Deployment
 
+### CI/CD Pipeline (Recommended)
+The project includes a GitHub Actions workflow that automatically builds and deploys your website when you push to the main branch.
+
+#### Setup GitHub Actions
+1. Add these secrets to your GitHub repository:
+   - `DEPLOY_HOST`: Your server hostname (e.g., `wevo.rischmann.fr`)
+   - `DEPLOY_USER`: SSH username for deployment
+   - `DEPLOY_KEY`: Private SSH key for authentication
+
+2. Generate an SSH key pair for deployment:
+   ```bash
+   ssh-keygen -t rsa -b 4096 -C "github-actions@yourdomain.com" -f ~/.ssh/github_deploy
+   ```
+
+3. Add the public key to your server's `~/.ssh/authorized_keys`
+4. Add the private key as `DEPLOY_KEY` secret in GitHub
+
+#### Manual Deployment Script
+```bash
+# Build the site
+just build
+
+# Deploy to server (requires SSH access)
+just deploy
+```
+
+The deployment script (`deploy.sh`) provides better error handling and verification compared to the basic rsync command.
+
 ### Docker
 ```bash
 # Build and run with Docker Compose
@@ -133,15 +161,6 @@ docker compose up --build
 
 # Development with hot reload
 just docker_dev
-```
-
-### Manual Deployment
-```bash
-# Build the site
-just build
-
-# Deploy to server (requires SSH access)
-just deploy
 ```
 
 ## Configuration
