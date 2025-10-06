@@ -8,6 +8,8 @@
   --code-text-color: #ec0000;
   --accent-color: #d21c1c;
   --bg-gray-focus: rgba(0, 0, 0, 0.1);
+
+  --pico-font-family-sans-serif: Times, "Times New Roman", serif;
 }
 
 [data-theme='dark'] {
