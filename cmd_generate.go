@@ -350,6 +350,7 @@ func (p page) generate(logger *slog.Logger, generationDate time.Time, renderer g
 	ctx := context.Background()
 
 	assets := newAssets(generationDate)
+	assets.add("pico.min.css")
 	assets.add("style.css")
 	assets.add("app.js")
 
@@ -511,6 +512,7 @@ func generateBlogIndex(logger *slog.Logger, generationDate time.Time, buildRootD
 	ctx := context.Background()
 
 	assets := newAssets(generationDate)
+	assets.add("pico.min.css")
 	assets.add("style.css")
 	assets.add("app.js")
 
@@ -585,6 +587,7 @@ func generateResume(logger *slog.Logger, generationDate time.Time, render goldma
 	ctx := context.Background()
 
 	assets := newAssets(generationDate)
+	assets.add("pico.min.css")
 	assets.add("style.css")
 	assets.add("app.js")
 
