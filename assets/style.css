@@ -24,45 +24,6 @@
   --bg-gray-focus: rgba(255, 255, 255, 0.1);
 }
 
-@media all {
-  html {
-    font-size: 24px;
-  }
-
-  body > * {
-    font-size: 100%;
-    margin-left: 7.5rem;
-    margin-right: 7.5rem;
-  }
-}
-
-@media all and (max-width: 840px) {
-  html {
-    font-size: 20px;
-  }
-
-  body > * {
-    margin-left: 5.5rem;
-    margin-right: 5.5rem;
-  }
-}
-
-@media all and (max-width: 760px) {
-  body > * {
-    margin-left: 2.5rem;
-    margin-right: 2.5rem;
-  }
-}
-
-@media all and (max-width: 580px) {
-  html {
-    font-size: 18px;
-  }
-
-  body > * {
-    margin: 0.7rem 1.5rem 0 1.5rem;
-  }
-}
 
 html {
   height: 100%;
@@ -98,25 +59,8 @@ p:has(img) {
 }
 
 h1 {
-  display: block;
   font-size: 170%;
-  line-height: 1.1;
-  margin-top: 1rem;
   margin-bottom: 1.5rem;
-  padding-top: 0.02em;
-  hyphens: none;
-}
-
-h2 {
-  padding-top: 0.02em;
-  margin-top: 0.7rem;
-  margin-bottom: 1.1rem;
-}
-
-h3 {
-  padding-top: 0.02em;
-  margin-top: 0.7rem;
-  margin-bottom: 1.1rem;
 }
 
 aside {
