@@ -350,7 +350,8 @@ func (p page) generate(logger *slog.Logger, generationDate time.Time, renderer g
 	ctx := context.Background()
 
 	assets := newAssets(generationDate)
-	assets.add("style.css")
+	assets.add("pico.min.css")
+	assets.add("custom.css")
 	assets.add("app.js")
 
 	if v, ok := p.metadata.Extra["require_prism"]; ok {
@@ -511,7 +512,8 @@ func generateBlogIndex(logger *slog.Logger, generationDate time.Time, buildRootD
 	ctx := context.Background()
 
 	assets := newAssets(generationDate)
-	assets.add("style.css")
+	assets.add("pico.min.css")
+	assets.add("custom.css")
 	assets.add("app.js")
 
 	// Generate the index page
