@@ -351,15 +351,14 @@ func (p page) generate(logger *slog.Logger, generationDate time.Time, renderer g
 
 	assets := newAssets(generationDate)
 	assets.add("pico.min.css")
-	assets.add("custom.css")
-	assets.add("app.js")
-
 	if v, ok := p.metadata.Extra["require_prism"]; ok {
 		if requirePrism, ok := v.(bool); ok && requirePrism {
 			assets.add("prism.css")
 			assets.add("prism.js")
 		}
 	}
+	assets.add("custom.css")
+	assets.add("app.js")
 
 	//
 
