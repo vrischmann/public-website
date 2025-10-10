@@ -204,7 +204,7 @@ func contentComponent(assets Assets, body templ.Component) templ.Component {
 			templ_7745c5c3_Var8 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 12, "<body><div class=\"container\"><header><ul><li><a href=\"/code\">/Code</a></li><li><a href=\"/blog\">/Blog</a></li><li><a href=\"/about\">/About</a></li><li><a href=\"/resume\">/Resume</a></li><li><button id=\"theme-toggle\"><span class=\"theme-icon\"></span></button></li></ul></header><main class=\"content\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 12, "<body><main class=\"container\"><header><nav><ul><li><strong>Vincent Rischmann</strong></li></ul><ul><li><a href=\"/code\">Code</a></li><li><a href=\"/blog\">Blog</a></li><li><a href=\"/about\">About</a></li><li><a href=\"/resume\">Resume</a></li><li><button id=\"theme-toggle\"><span class=\"theme-icon\"></span></button></li></ul></nav></header>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -212,7 +212,7 @@ func contentComponent(assets Assets, body templ.Component) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 13, "</main><footer><ul><li><a href=\"https://github.com/vrischmann\">GitHub</a></li><li><a href=\"mailto:vincent@rischmann.fr\">Email</a></li><li><a href=\"https://www.linkedin.com/in/vrischmann/\">LinkedIn</a></li></ul></footer></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 13, "<footer><nav><ul><li><a href=\"https://github.com/vrischmann\">GitHub</a></li><li><a href=\"mailto:vincent@rischmann.fr\">Email</a></li><li><a href=\"https://www.linkedin.com/in/vrischmann/\">LinkedIn</a></li></ul></nav></footer></main>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
