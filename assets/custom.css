@@ -96,3 +96,10 @@ article header h2 {
 div.blog-toc {
   margin-bottom: 2em;
 }
+
+/* Code blocks */
+
+code[class*='language-'],
+pre[class*='language-'] {
+  font-size: calc(var(--pico-font-size) * 0.65);
+}
