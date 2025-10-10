@@ -38,27 +38,32 @@ templ headerComponent(params HeaderParams, assets Assets) {
 
 templ contentComponent(assets Assets, body templ.Component) {
 	<body>
-		<div class="container">
+		<main class="container">
 			<header>
-				<ul>
-					<li><a href="/code">/Code</a></li>
-					<li><a href="/blog">/Blog</a></li>
-					<li><a href="/about">/About</a></li>
-					<li><a href="/resume">/Resume</a></li>
-					<li><button id="theme-toggle"><span class="theme-icon"></span></button></li>
-				</ul>
+				<nav>
+					<ul>
+						<li><strong>Vincent Rischmann</strong></li>
+					</ul>
+					<ul>
+						<li><a href="/code">Code</a></li>
+						<li><a href="/blog">Blog</a></li>
+						<li><a href="/about">About</a></li>
+						<li><a href="/resume">Resume</a></li>
+						<li><button id="theme-toggle"><span class="theme-icon"></span></button></li>
+					</ul>
+				</nav>
 			</header>
-			<main class="content">
-				@body
-			</main>
+			@body
 			<footer>
-				<ul>
-					<li><a href="https://github.com/vrischmann">GitHub</a></li>
-					<li><a href="mailto:vincent@rischmann.fr">Email</a></li>
-					<li><a href="https://www.linkedin.com/in/vrischmann/">LinkedIn</a></li>
-				</ul>
+				<nav>
+					<ul>
+						<li><a href="https://github.com/vrischmann">GitHub</a></li>
+						<li><a href="mailto:vincent@rischmann.fr">Email</a></li>
+						<li><a href="https://www.linkedin.com/in/vrischmann/">LinkedIn</a></li>
+					</ul>
+				</nav>
 			</footer>
-		</div>
+		</main>
 		@jsAssets(assets)
 	</body>
 }

@@ -30,14 +30,14 @@ templ BlogIndex(allItems []BlogItems) {
 }
 
 templ BlogContent(title string, date time.Time, tableOfContents templ.Component, content templ.Component) {
-	<div class="article-header">
-		<h1>{ title }</h1>
-		<h2>{ date.Format("2006 Jan 02") }</h2>
-	</div>
-	<div class="article">
-		<nav class="blog-toc">
+	<article>
+		<header>
+			<h1>{ title }</h1>
+			<h2>{ date.Format("2006 Jan 02") }</h2>
+		</header>
+		<div class="blog-toc">
 			@tableOfContents
-		</nav>
+		</div>
 		@content
-	</div>
+	</article>
 }
