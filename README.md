@@ -11,12 +11,13 @@ A static site generator built in Go that powers my personal website at [https://
 
 ## Tech Stack
 
-- **Language**: Go 1.24.1
+- **Language**: Go 1.24
 - **Templating**: [templ](https://github.com/a-h/templ) for HTML templates
 - **Markdown**: [goldmark](https://github.com/yuin/goldmark) for Markdown processing
-- **Styling**: Vanilla CSS with Prism.js for syntax highlighting
+- **Styling**: Pico CSS + custom CSS with Prism.js for syntax highlighting
 - **Web Server**: Caddy 2
 - **Build Tool**: [just](https://github.com/casey/just)
+- **Image Processing**: ImageMagick for PNG to AVIF conversion
 
 ## Project Structure
 
@@ -28,11 +29,24 @@ A static site generator built in Go that powers my personal website at [https://
 │   ├── about.md          # About page
 │   └── code.md           # Code page
 ├── templates/            # HTML templates (templ)
+│   ├── layout.templ      # Main layout template
+│   ├── blog.templ        # Blog post template
+│   ├── resume.templ      # Resume page template
+│   └── card.templ        # Card component template
 ├── assets/               # Static assets (CSS, JS)
+│   ├── pico.min.css      # Pico CSS framework
+│   ├── style.css         # Custom styles
+│   ├── custom.css        # Additional custom styles
+│   ├── prism.css/js      # Syntax highlighting
+│   └── app.js            # JavaScript functionality
 ├── files/                # Static files (PDFs, images)
 ├── build/                # Generated site (output)
 ├── cmd_generate.go       # Main generation logic
 ├── main.go              # CLI entry point
+├── Justfile             # Build commands
+├── compose.yaml         # Docker Compose configuration
+├── package.json         # Node.js dependencies (CSS formatting)
+├── AGENTS.md            # AI agent documentation
 └── Dockerfile           # Container configuration
 ```
 
@@ -56,16 +70,22 @@ A static site generator built in Go that powers my personal website at [https://
 ## Development
 
 ### Prerequisites
-- Go 1.24.1+
+- Go 1.24+
 - [just](https://github.com/casey/just) command runner
 - [templ](https://github.com/a-h/templ) CLI tool
-- Optional: watchexec for file watching
+- Node.js & npm (for CSS formatting with prettier)
+- [ImageMagick](https://imagemagick.org/) (for PNG to AVIF conversion)
+- [fd](https://github.com/sharkdp/fd) (fast file finder)
+- [watchexec](https://github.com/watchexec/watchexec) (file watching)
 
 ### Quick Start
 
 ```bash
-# Install dependencies
+# Install Go dependencies
 go mod tidy
+
+# Install Node.js dependencies (optional, for CSS formatting)
+npm install
 
 # Generate templates
 just gen-template
@@ -78,6 +98,9 @@ just build-dev
 
 # Watch for changes and rebuild
 just watch-build-dev
+
+# Convert PNG images to AVIF (optional)
+just convert-images
 ```
 
 ### Available Commands
@@ -94,7 +117,11 @@ just watch-build-dev # Watch and build development
 just watch-convert-images # Watch PNG files and convert to AVIF
 
 # Code formatting
-just fmt            # Format Go and templ code
+just fmt            # Format Go, templ, and CSS code
+
+# Image processing
+just convert-images            # Convert PNG to AVIF
+just watch-convert-images      # Watch and auto-convert PNG to AVIF
 
 # Docker
 just docker_dev     # Run in Docker with hot reload
@@ -135,6 +162,15 @@ docker compose up --build
 just docker_dev
 ```
 
+### CSS Formatting (Optional)
+```bash
+# Format CSS files using prettier
+npm run fmt:css
+
+# Or use the just command (includes all formatting)
+just fmt
+```
+
 ### Manual Deployment
 ```bash
 # Build the site
@@ -152,9 +188,29 @@ just deploy
 - Docker configuration in `compose.yaml`
 
 ### Customization
-- Templates: Edit `.templ` files in `templates/`
-- Styling: Modify `assets/style.css`
+- Templates: Edit `.templ` files in `templates/` (remember to run `just gen-template` after changes)
+- Styling: Modify `assets/style.css` and `assets/custom.css`
 - Syntax highlighting: Update `assets/prism.css` and `assets/prism.js`
+- JavaScript: Add functionality in `assets/app.js`
+
+## Image Optimization
+
+The site automatically converts PNG images to AVIF format for better compression and modern browser support:
+
+```bash
+# Convert all PNG files to AVIF
+just convert-images
+
+# Watch for new PNG files and auto-convert
+just watch-convert-images
+```
+
+AVIF files are automatically included in the build process and benefit from asset versioning.
+
+## Documentation
+
+- **AGENTS.md**: Comprehensive documentation for AI agents working on this project
+- **CLAUDE.md**: Symbolic link to AGENTS.md for Claude agents
 
 ## License
 
