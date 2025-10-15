@@ -5,7 +5,7 @@ id: side_projects
 
 ## Side projects
 
-Over the years I've accumulated a lot of side projects, most of them are open-source. This is only some of them, you can find all my open-source code on [GitHub](https://github.com/vrischmann).
+Over the years, I have developed numerous side projects, most of them are open-source. These are just a few examples, you can find all my open-source code on [GitHub](https://github.com/vrischmann).
 
 * [zig-sqlite](https://github.com/vrischmann/zig-sqlite), a SQLite wrapper for Zig adding compile-time checked queries.
 * [envconfig](https://rischmann.fr/code/envconfig), parse configuration data from environment variables.

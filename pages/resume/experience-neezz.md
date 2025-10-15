@@ -11,10 +11,10 @@ id: work_experience
 
 <div>
 
-neezz.com was an email service startup. I was tasked with developing and deploying a platform to send emails.
+neezz.com was an email service startup. I was responsible for developing and deploying an email platform.
 
-My main mission was developing the backend services to schedule, create, personalise and send emails; I used Java, MySQL, Redis to do this.
+My primary responsibility was developing backend services to schedule, create, personalize, and send emails; I used Java, MySQL, Redis to do this.
 
-My second mission was deploying and managing a fleet of servers were the services were deployed; this involved provisioning bare-metal servers and managing configuration using Puppet.
+My secondary responsibility was deploying and managing the server fleet where services were deployed; This involved provisioning bare-metal servers and managing configuration with Puppet.
 
 </div>
