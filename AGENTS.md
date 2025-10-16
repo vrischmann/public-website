@@ -97,6 +97,19 @@ just docker_dev                # Run with Docker and hot reload
 
 No test files found in the codebase. This is a straightforward static site generator without complex business logic requiring extensive testing.
 
+### Testing with Caddy
+
+For testing the generated website locally, use Caddy as a web server:
+
+```bash
+# Start Caddy in the background with the project's Caddyfile
+caddy run -c Caddyfile
+
+# The website will be available at: https://localhost:2015
+```
+
+This allows testing the site with HTTPS and proper serving conditions that match production.
+
 ## Important Notes
 
 - Always run `just gen-template` after modifying `.templ` files
