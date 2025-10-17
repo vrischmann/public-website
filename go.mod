@@ -3,7 +3,7 @@ module go.rischmann.fr/website-generator
 go 1.24
 
 require (
-	github.com/a-h/templ v0.3.943
+	github.com/a-h/templ v0.3.960
 	github.com/spf13/cobra v1.9.1
 	github.com/yuin/goldmark v1.7.13
 	github.com/yuin/goldmark-meta v1.1.0
