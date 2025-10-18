@@ -40,13 +40,19 @@ templ contentComponent(assets Assets, body templ.Component) {
 	<body>
 		<div class="container">
 			<header>
-				<ul>
-					<li><a href="/code">/Code</a></li>
-					<li><a href="/blog">/Blog</a></li>
-					<li><a href="/about">/About</a></li>
-					<li><a href="/resume">/Resume</a></li>
-					<li><button id="theme-toggle"><span class="theme-icon"></span></button></li>
-				</ul>
+				<nav class="main-nav">
+					<div class="hamburger">
+						<span></span>
+						<span></span>
+						<span></span>
+					</div>
+					<ul class="nav-links">
+						<li><a href="/code">Code</a></li>
+						<li><a href="/blog">Blog</a></li>
+						<li><a href="/about">About</a></li>
+						<li><a href="/resume">Resume</a></li>
+					</ul>
+				</nav>
 			</header>
 			<main class="content">
 				@body
