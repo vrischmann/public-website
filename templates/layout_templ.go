@@ -204,7 +204,7 @@ func contentComponent(assets Assets, body templ.Component) templ.Component {
 			templ_7745c5c3_Var8 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 12, "<body><div class=\"container\"><header><ul><li><a href=\"/code\">/Code</a></li><li><a href=\"/blog\">/Blog</a></li><li><a href=\"/about\">/About</a></li><li><a href=\"/resume\">/Resume</a></li><li><button id=\"theme-toggle\"><span class=\"theme-icon\"></span></button></li></ul></header><main class=\"content\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 12, "<body><div class=\"container\"><header><nav class=\"main-nav\"><div class=\"hamburger\"><span></span> <span></span> <span></span></div><ul class=\"nav-links\"><li><a href=\"/code\">Code</a></li><li><a href=\"/blog\">Blog</a></li><li><a href=\"/about\">About</a></li><li><a href=\"/resume\">Resume</a></li></ul></nav></header><main class=\"content\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
