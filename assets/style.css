@@ -223,7 +223,7 @@ pre > code {
 
 @media all and (max-width: 520px) {
   .container > header {
-    margin-top: 0.5em;
+    margin-top: 0;
   }
 }
 
@@ -278,18 +278,52 @@ pre > code {
 
 .main-nav {
   display: grid;
-  grid-template-columns: auto max-content;
+  grid-template-columns: max-content auto;
+  /* gap: 1.3em; */
   padding: 0 0 0.6em 0;
   border-bottom: 0.1em solid var(--header-border-color);
+  align-items: center;
+}
+
+/* Theme toggle button positioned after nav links on desktop */
+.main-nav > #theme-toggle {
+  order: 1;
 }
 
 .nav-links {
   display: grid;
-  grid-template-columns: repeat(4, max-content) 1fr;
+  grid-template-columns: repeat(4, max-content) max-content 1fr;
   column-gap: 1.3em;
   margin: 0;
   align-items: center;
   padding: 0;
+}
+
+/* Theme toggle buttons styling */
+#theme-toggle,
+#theme-toggle-nav {
+  background: none;
+  border: none;
+  padding: 0.2em;
+  font-size: 1.1em;
+  transition:
+    background 0.18s,
+    color 0.18s;
+  justify-self: end;
+}
+
+#theme-toggle:hover,
+#theme-toggle:focus,
+#theme-toggle-nav:hover,
+#theme-toggle-nav:focus {
+  background: var(--bg-gray-focus);
+  color: var(--link-color);
+  outline: none;
+}
+
+.theme-icon {
+  display: block;
+  font-size: 1em;
 }
 
 .nav-links > li {
@@ -334,13 +368,14 @@ pre > code {
 
 /* Mobile navigation */
 @media all and (max-width: 520px) {
-  .main-nav {
-    grid-template-columns: auto;
-    grid-auto-flow: row;
-  }
-
   .hamburger {
     display: grid;
+  }
+
+  .main-nav > #theme-toggle {
+    order: -1;
+    padding: 0;
+    justify-self: start;
   }
 
   .nav-links {
@@ -387,7 +422,7 @@ pre > code {
 #theme-toggle {
   background: none;
   border: none;
-  padding: 0.2em;
+  /* padding: 0.2em; */
   font-size: 1.1em;
   transition:
     background 0.18s,
